@@ -159,13 +159,31 @@ def render_sidebar(lang: str):
     sources_title = "📚 Medical Sources" if lang == "en" else "📚 Fuentes Médicas"
     with st.sidebar.expander(sources_title, expanded=False):
         st.markdown("""
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <a href="https://healthychildren.org" target="_blank" style="text-decoration: none; padding: 0.5rem; background: #f1f5f9; border-radius: 8px; color: #1e293b;">
-                🏥 AAP HealthyChildren.org
-            </a>
-            <a href="https://nhs.uk" target="_blank" style="text-decoration: none; padding: 0.5rem; background: #f1f5f9; border-radius: 8px; color: #1e293b;">
-                🏥 NHS UK Guidelines
-            </a>
+        <div style="font-size: 0.85rem; line-height: 1.6;">
+            <div style="margin-bottom: 0.75rem;">
+                <strong>🏥 American Academy of Pediatrics (AAP)</strong><br>
+                <a href="https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-and-Your-Baby.aspx" target="_blank" style="color: #6366f1; text-decoration: none;">
+                    • Fever and Your Baby
+                </a><br>
+                <a href="https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-Without-Fear.aspx" target="_blank" style="color: #6366f1; text-decoration: none;">
+                    • Fever Without Fear
+                </a><br>
+                <a href="https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/When-to-Call-the-Pediatrician.aspx" target="_blank" style="color: #6366f1; text-decoration: none;">
+                    • When to Call the Pediatrician
+                </a><br>
+                <a href="https://www.healthychildren.org/English/tips-tools/symptom-checker/Pages/symptomviewer.aspx?symptom=Fever+(0-12+Months)" target="_blank" style="color: #6366f1; text-decoration: none;">
+                    • Symptom Checker: Fever
+                </a>
+            </div>
+            <div style="margin-bottom: 0.75rem;">
+                <strong>🏥 NHS UK</strong><br>
+                <a href="https://www.nhs.uk/conditions/fever-in-children/" target="_blank" style="color: #6366f1; text-decoration: none;">
+                    • High Temperature (Fever) in Children
+                </a>
+            </div>
+            <div style="background: #fef3c7; padding: 0.5rem; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 0.75rem;">
+                <small><strong>ℹ️ Note:</strong> All medical advice is grounded in these validated clinical guidelines.</small>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     

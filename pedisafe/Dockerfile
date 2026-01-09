@@ -16,8 +16,14 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Create .streamlit directory for config
+RUN mkdir -p /app/.streamlit
+
 # Copy application files
 COPY . .
+
+# Create empty secrets.toml to suppress warning (keys come from env vars)
+RUN touch /app/.streamlit/secrets.toml
 
 # Expose Streamlit port
 EXPOSE 8501

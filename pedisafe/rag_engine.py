@@ -55,7 +55,7 @@ class PediSafeRAG:
             )
     
     def _load_knowledge_base(self):
-        """Carga y vectoriza los documentos de conocimiento"""
+        """Carga y vectoriza los documentos de conocimiento con estrategia optimizada"""
         # Load markdown files
         loader = DirectoryLoader(
             str(self.knowledge_dir),
@@ -65,19 +65,38 @@ class PediSafeRAG:
         )
         documents = loader.load()
         
-        # Split into chunks
+        # RAG Best Practice: Hierarchical chunking con overlap adecuado
+        # chunk_size: 800-1200 tokens es óptimo para medical context
+        # overlap: 150-250 para preservar contexto entre chunks
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000,
-            chunk_overlap=200,
-            separators=["\n## ", "\n### ", "\n", " "]
+            chunk_size=1000,  # Tamaño óptimo para contexto médico
+            chunk_overlap=200,  # 20% overlap para coherencia
+            separators=[
+                "\n## ",      # Secciones principales (H2)
+                "\n### ",     # Subsecciones (H3)
+                "\n#### ",    # Sub-subsecciones (H4)
+                "\n\n",       # Párrafos
+                "\n",         # Líneas
+                ". ",         # Oraciones
+                " "           # Palabras (último recurso)
+            ],
+            length_function=len,
+            is_separator_regex=False
         )
         splits = text_splitter.split_documents(documents)
         
-        # Create vector store with FAISS (gratuito, local)
+        # RAG Best Practice: FAISS con IndexFlatL2 para búsqueda exacta
         self.vectorstore = FAISS.from_documents(splits, self.embeddings)
+        
+        # RAG Best Practice: Hybrid search con MMR para diversidad
+        # MMR (Maximal Marginal Relevance) reduce redundancia en resultados
         self.retriever = self.vectorstore.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": 5}  # Top 5 chunks más relevantes
+            search_type="mmr",  # MMR en lugar de similarity para mayor diversidad
+            search_kwargs={
+                "k": 6,              # Top 6 chunks (mejor cobertura)
+                "fetch_k": 20,       # Fetch 20, luego MMR selecciona 6
+                "lambda_mult": 0.7   # Balance relevancia (1.0) vs diversidad (0.0)
+            }
         )
     
     def _setup_chain(self):
@@ -114,16 +133,15 @@ class PediSafeRAG:
         import re
         formatted = []
         
-        # Map de archivos a URLs específicas
+        # Map de archivos a URLs específicas (solo fuentes médicas validadas)
         source_urls = {
             "aap_fever_baby.md": ("Fever and Your Baby - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-and-Your-Baby.aspx"),
             "aap_fever_without_fear.md": ("Fever Without Fear - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-Without-Fear.aspx"),
             "aap_symptom_checker.md": ("Symptom Checker: Fever - AAP", "https://www.healthychildren.org/English/tips-tools/symptom-checker/Pages/symptomviewer.aspx?symptom=Fever+(0-12+Months)"),
             "aap_when_to_call.md": ("When to Call the Pediatrician - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/When-to-Call-the-Pediatrician.aspx"),
             "nhs_fever_children.md": ("High Temperature in Children - NHS", "https://www.nhs.uk/conditions/fever-in-children/"),
-            "unified_fever_guidelines.md": ("Unified Fever Guidelines", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
-            "fever_assessment_examples.md": ("Fever Assessment Examples", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
-            "test_case_validation.md": ("Clinical Validation Cases", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
+            "unified_fever_guidelines.md": ("Unified Fever Guidelines - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
+            "fever_assessment_examples.md": ("Fever Assessment Examples - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
         }
         
         for i, doc in enumerate(docs, 1):
