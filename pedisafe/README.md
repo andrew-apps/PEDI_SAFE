@@ -120,9 +120,9 @@ PediSafe implements a **multi-layered safety architecture** that combines determ
 
 ### Prerequisites
 - **Python 3.9+** ([Download](https://python.org))
-- **OpenAI API Key** ([Get one here](https://platform.openai.com/api-keys))
-  - Free tier: $5 credit (enough for ~1000-5000 queries)
-  - Pay-as-you-go: ~$0.001-0.005 per query
+- **No API key needed!** - The app includes a free Cerebras demo key
+  - Optional: Get your own free key at [cloud.cerebras.ai](https://cloud.cerebras.ai)
+  - Alternative: OpenAI API Key ([Get one here](https://platform.openai.com/api-keys))
 
 ### Installation
 
@@ -146,25 +146,21 @@ pip install -r requirements.txt
 
 ### Configuration
 
-**Option 1: Environment Variable (Recommended for development)**
+**🚀 Quick Start (No Configuration Needed!)**
+- The app includes a **FREE Cerebras API key** by default
+- Just run the app and start chatting!
+
+**For Production (Optional):**
 ```bash
 # Copy example file
 cp .env.example .env
 
-# Edit .env and add your API key
+# Add your own Cerebras key (free)
+CEREBRAS_API_KEY=csk-your-key-here
+
+# Or use OpenAI (paid)
 # OPENAI_API_KEY=sk-your-key-here
 ```
-
-**Option 2: Streamlit Secrets (Recommended for deployment)**
-```bash
-# Create secrets file
-mkdir -p .streamlit
-echo 'OPENAI_API_KEY = "sk-your-key-here"' > .streamlit/secrets.toml
-```
-
-**Option 3: BYOK (Bring Your Own Key)**
-- Don't configure anything
-- Enter your API key in the app sidebar when prompted
 
 ### Run the App
 
@@ -235,25 +231,23 @@ Based on AAP guidelines, babies 3-6 months with fever above
 
 ---
 
-## 💰 Cost Optimization
+## 💰 Cost - 100% FREE!
 
-PediSafe is designed for **minimal cost**:
+PediSafe is designed to be **completely free**:
 
 | Component | Model/Service | Cost |
 |-----------|---------------|------|
-| Embeddings | text-embedding-3-small | $0.02/1M tokens |
-| LLM | GPT-4o-mini | $0.15/$0.60 per 1M tokens |
+| LLM | Cerebras Llama 3.3 70B | **FREE** |
+| Embeddings | Hugging Face (local) | **FREE** |
 | Vector Store | FAISS (local) | **FREE** |
 | Hosting | Streamlit Community | **FREE** |
 
-**Estimated cost per conversation:** ~$0.001-0.005 (less than 1 cent!)
+**Total cost: $0.00** 🎉
 
-**Cost Comparison:**
-- **ChatGPT Plus:** $20/month (unlimited queries)
-- **PediSafe:** $0.10-0.50 for 100 queries
-- **For 1000 queries:** ChatGPT = $20, PediSafe = $1-5
-
-**Winner:** PediSafe for occasional use, ChatGPT for heavy daily use (but without the safety guarantees!)
+**Alternative (OpenAI - paid):**
+- Embeddings: $0.02/1M tokens
+- LLM: $0.15-0.60/1M tokens
+- ~$0.001-0.005 per conversation
 
 ## 📊 Triage Levels
 
@@ -370,7 +364,9 @@ MIT License - See [LICENSE](LICENSE) for details.
 - **American Academy of Pediatrics (AAP)** - Clinical guidelines
 - **NHS UK** - Evidence-based health guidance
 - **Alameda Hacks** - For the opportunity to build for social good
-- **OpenAI** - GPT-4o-mini and embeddings API
+- **Cerebras** - Ultra-fast FREE LLM inference
+- **Hugging Face** - FREE embeddings
+- **OpenAI** - Alternative LLM provider
 - **LangChain** - RAG framework
 - **Streamlit** - Web framework
 

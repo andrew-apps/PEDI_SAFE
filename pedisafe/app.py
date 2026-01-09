@@ -29,7 +29,7 @@ def init_session_state():
     if "saved_owner_key" not in st.session_state:
         st.session_state.saved_owner_key = None
     if "llm_provider" not in st.session_state:
-        st.session_state.llm_provider = "openai"
+        st.session_state.llm_provider = "cerebras"  # Default to FREE Cerebras
     if "cerebras_key" not in st.session_state:
         st.session_state.cerebras_key = None
     if "legend_minimized" not in st.session_state:
@@ -39,182 +39,192 @@ def get_api_key(lang: str) -> tuple[str | None, str]:
     """
     Get API key with BYOK (Bring Your Own Key) pattern
     Returns: (api_key, provider) where provider is 'openai' or 'cerebras'
+    API keys are loaded ONLY from secrets.toml or environment variables - NEVER hardcoded
     """
-    st.sidebar.markdown(f"### 🤖 {get_text('llm_provider_section', lang) if 'llm_provider_section' in get_text.__code__.co_names else 'LLM Provider'}")
-    
-    # Provider selector
+    # Provider selector with modern styling
     provider_options = {
-        "OpenAI (GPT-4o-mini)": "openai",
-        "Cerebras (Llama 3.3 70B)": "cerebras"
+        "🚀 Cerebras (Llama 3.3 70B) - FREE": "cerebras",
+        "💎 OpenAI (GPT-4o-mini)": "openai"
     }
+    
     selected_provider = st.sidebar.selectbox(
-        "Select Provider",
+        "🤖 AI Provider",
         options=list(provider_options.keys()),
-        index=0 if st.session_state.llm_provider == "openai" else 1,
-        key="provider_selector"
+        index=0 if st.session_state.llm_provider == "cerebras" else 1,
+        key="provider_selector",
+        help="Cerebras is FREE and ultra-fast!"
     )
     provider = provider_options[selected_provider]
     st.session_state.llm_provider = provider
     
-    st.sidebar.divider()
-    st.sidebar.markdown(f"### 🔑 API Key")
-    
-    # Check for owner keys
-    if st.session_state.saved_owner_key is None:
-        owner_key = None
+    # For Cerebras
+    if provider == "cerebras":
+        # Check for key in secrets/env
+        cerebras_key = None
         try:
-            key_name = "CEREBRAS_API_KEY" if provider == "cerebras" else "OPENAI_API_KEY"
-            if hasattr(st, 'secrets') and key_name in st.secrets:
-                owner_key = st.secrets[key_name]
+            if hasattr(st, 'secrets') and 'CEREBRAS_API_KEY' in st.secrets:
+                cerebras_key = st.secrets['CEREBRAS_API_KEY']
         except:
             pass
+        if not cerebras_key:
+            cerebras_key = os.getenv('CEREBRAS_API_KEY')
         
+        if cerebras_key and len(cerebras_key) > 10:
+            st.sidebar.success("✅ Cerebras API key configured")
+            return cerebras_key, "cerebras"
+        
+        # No key found - ask user to input
+        st.sidebar.info("🆓 Cerebras is FREE! Get your key at [cloud.cerebras.ai](https://cloud.cerebras.ai)")
+        user_key = st.sidebar.text_input(
+            "Cerebras API Key",
+            type="password",
+            placeholder="csk-...",
+            help="Format: csk-xxxxxxxx",
+            key="cerebras_api_key_input"
+        )
+        if user_key and len(user_key) > 10:
+            st.session_state.cerebras_key = user_key
+            return user_key, "cerebras"
+        return None, "cerebras"
+    
+    else:  # OpenAI
+        # Check for key in secrets/env
+        owner_key = None
+        try:
+            if hasattr(st, 'secrets') and 'OPENAI_API_KEY' in st.secrets:
+                owner_key = st.secrets['OPENAI_API_KEY']
+        except:
+            pass
         if not owner_key:
-            key_name = "CEREBRAS_API_KEY" if provider == "cerebras" else "OPENAI_API_KEY"
-            owner_key = os.getenv(key_name)
+            owner_key = os.getenv('OPENAI_API_KEY')
         
-        st.session_state.saved_owner_key = owner_key
-    else:
-        owner_key = st.session_state.saved_owner_key
-    
-    has_owner_key = owner_key is not None and len(owner_key) > 10
-    
-    if has_owner_key:
-        st.sidebar.success(f"✅ Demo key available")
-        use_own = st.sidebar.toggle("Use my own API Key", value=False, key="use_own_key_toggle")
-    else:
-        st.sidebar.warning(f"⚠️ No demo key - enter your API Key")
-        use_own = True
-    
-    if use_own:
-        # Get appropriate key based on provider
-        if provider == "cerebras":
-            st.sidebar.success("🆓 **100% GRATIS**: Cerebras + Hugging Face embeddings (sin costo)")
-            st.sidebar.info("Obtén tu clave gratuita en [cloud.cerebras.ai](https://cloud.cerebras.ai)")
-            default_value = st.session_state.cerebras_key if st.session_state.cerebras_key else ""
-            user_key = st.sidebar.text_input(
-                "Cerebras API Key",
-                type="password",
-                value=default_value,
-                placeholder="csk-...",
-                help="Formato: csk-xxxxxxxxxxxxxxxxxxxxxxxx",
-                key="cerebras_api_key_input"
-            )
-            if user_key and len(user_key) > 10:
-                st.session_state.cerebras_key = user_key
-                return user_key, "cerebras"
-            elif st.session_state.cerebras_key and len(st.session_state.cerebras_key) > 10:
-                return st.session_state.cerebras_key, "cerebras"
-            else:
-                return None, "cerebras"
-        else:
-            default_value = st.session_state.api_key if st.session_state.api_key and st.session_state.api_key.startswith("sk-") else ""
-            user_key = st.sidebar.text_input(
-                "OpenAI API Key",
-                type="password",
-                value=default_value,
-                placeholder="sk-...",
-                help="Get your key from [platform.openai.com/api-keys](https://platform.openai.com/api-keys)",
-                key="openai_api_key_input"
-            )
-            if user_key and user_key.startswith("sk-"):
-                st.session_state.api_key = user_key
-                return user_key, "openai"
-            return st.session_state.api_key if st.session_state.api_key and st.session_state.api_key.startswith("sk-") else None, "openai"
-    else:
-        return owner_key, provider
+        if owner_key and len(owner_key) > 10:
+            st.sidebar.success("✅ OpenAI API key configured")
+            return owner_key, "openai"
+        
+        st.sidebar.warning("⚠️ OpenAI requires an API key")
+        user_key = st.sidebar.text_input(
+            "OpenAI API Key",
+            type="password",
+            placeholder="sk-...",
+            help="Get your key from platform.openai.com",
+            key="openai_api_key_input"
+        )
+        if user_key and user_key.startswith("sk-"):
+            st.session_state.api_key = user_key
+            return user_key, "openai"
+        return None, "openai"
 
 def render_sidebar(lang: str):
-    """Render sidebar with information and controls"""
-    st.sidebar.markdown(f"# {get_text('sidebar_title', lang)}")
-    st.sidebar.markdown(f"*{get_text('sidebar_subtitle', lang)}*")
-    st.sidebar.divider()
-    
-    # Triage legend
-    render_triage_legend_sidebar(lang)
-    st.sidebar.divider()
-    
-    # Quick guide
-    with st.sidebar.expander(get_text("info_to_provide", lang)):
-        st.markdown(get_text("info_list", lang))
-    
-    st.sidebar.divider()
-    
-    # Sources
-    st.sidebar.markdown(f"### {get_text('medical_sources', lang)}")
+    """Render sidebar with information and controls - Modern Design"""
+    # Logo and title
     st.sidebar.markdown("""
-    - [🌐 AAP HealthyChildren.org](https://healthychildren.org)
-    - [🌐 NHS UK](https://nhs.uk)
-    """)
-    
-    # Knowledge base files
-    with st.sidebar.expander(get_text("knowledge_files", lang)):
-        knowledge_path = Path(__file__).parent / "knowledge"
-        if knowledge_path.exists():
-            md_files = list(knowledge_path.glob("*.md"))
-            for file in sorted(md_files):
-                st.markdown(f"📄 `{file.name}`")
-        else:
-            st.warning(get_text("no_knowledge_files", lang))
-    
-    # Clear chat button
-    st.sidebar.divider()
-    if st.sidebar.button(f"🗑️ {get_text('clear_chat', lang)}", use_container_width=True):
-        st.session_state.messages = []
-        st.rerun()
-
-def render_fixed_language_selector(lang: str):
-    """Render fixed language selector at top right"""
-    lang_options = {
-        "English 🇺🇸": "en",
-        "Español 🇪🇸": "es"
-    }
-    
-    # Create HTML for fixed language selector
-    current_lang_display = "English 🇺🇸" if lang == "en" else "Español 🇪🇸"
-    other_lang = "es" if lang == "en" else "en"
-    other_lang_display = "Español 🇪🇸" if lang == "en" else "English 🇺🇸"
-    
-    st.markdown(f"""
-    <div class="fixed-language-selector">
-        <div class="language-toggle">
-            <span class="current-lang">🌐 {current_lang_display}</span>
-            <button class="lang-switch-btn" onclick="document.getElementById('lang-switch-trigger').click();">⇄</button>
-        </div>
+    <div style="text-align: center; padding: 1rem 0;">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🩺</div>
+        <h1 style="font-size: 1.5rem; margin: 0; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PediSafe</h1>
+        <p style="color: #64748b; font-size: 0.85rem; margin: 0.25rem 0 0 0;">AI Pediatric Triage</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Hidden selectbox for actual language switching
-    with st.container():
-        selected_lang = st.selectbox(
-            "Language",
-            options=list(lang_options.keys()),
-            index=0 if lang == "en" else 1,
-            key="main_language_selector",
-            label_visibility="collapsed"
-        )
-        
-        new_lang = lang_options[selected_lang]
-        if new_lang != st.session_state.language:
-            st.session_state.language = new_lang
-            st.session_state.rag_engine = None
-            st.rerun()
+    st.sidebar.divider()
+    
+    # Triage Legend - Always visible, interactive
+    render_triage_legend_sidebar(lang)
+    
+    st.sidebar.divider()
+    
+    # Quick Tips
+    tips_title = "💡 Tips for Best Results" if lang == "en" else "💡 Consejos"
+    with st.sidebar.expander(tips_title, expanded=False):
+        if lang == "en":
+            st.markdown("""
+            **Include in your message:**
+            - 👶 Child's age (months/years)
+            - 🌡️ Temperature reading
+            - ⏱️ How long they've had fever
+            - 📋 Other symptoms
+            - 💊 Any medications given
+            """)
+        else:
+            st.markdown("""
+            **Incluye en tu mensaje:**
+            - 👶 Edad del niño (meses/años)
+            - 🌡️ Temperatura medida
+            - ⏱️ Duración de la fiebre
+            - 📋 Otros síntomas
+            - 💊 Medicamentos dados
+            """)
+    
+    # Medical Sources
+    sources_title = "📚 Medical Sources" if lang == "en" else "📚 Fuentes Médicas"
+    with st.sidebar.expander(sources_title, expanded=False):
+        st.markdown("""
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <a href="https://healthychildren.org" target="_blank" style="text-decoration: none; padding: 0.5rem; background: #f1f5f9; border-radius: 8px; color: #1e293b;">
+                🏥 AAP HealthyChildren.org
+            </a>
+            <a href="https://nhs.uk" target="_blank" style="text-decoration: none; padding: 0.5rem; background: #f1f5f9; border-radius: 8px; color: #1e293b;">
+                🏥 NHS UK Guidelines
+            </a>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.sidebar.divider()
+    
+    # Clear chat button
+    clear_text = "Clear Conversation" if lang == "en" else "Limpiar Chat"
+    if st.sidebar.button(f"🗑️ {clear_text}", use_container_width=True, type="secondary"):
+        st.session_state.messages = []
+        st.rerun()
+
+def render_language_selector_sidebar(lang: str):
+    """Render language selector in sidebar - clean and simple"""
+    lang_options = {
+        "🇺🇸 English": "en",
+        "🇪🇸 Español": "es"
+    }
+    
+    selected_lang = st.sidebar.selectbox(
+        "🌐 Language / Idioma",
+        options=list(lang_options.keys()),
+        index=0 if lang == "en" else 1,
+        key="language_selector"
+    )
+    
+    new_lang = lang_options[selected_lang]
+    if new_lang != st.session_state.language:
+        st.session_state.language = new_lang
+        st.session_state.rag_engine = None
+        st.rerun()
 
 def render_triage_legend_sidebar(lang: str):
-    """Render triage legend in sidebar as expander"""
+    """Render triage legend in sidebar - Always visible with modern design"""
     triage_levels = get_triage_levels(lang)
-    legend_title = get_text('triage_levels_title', lang)
+    legend_title = "🚦 Triage Levels" if lang == "en" else "🚦 Niveles de Triaje"
     
-    with st.sidebar.expander(f"📊 {legend_title}", expanded=False):
-        for level, info in triage_levels.items():
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; 
-                        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%); 
-                        border-radius: 10px; margin: 0.5rem 0; border: 1px solid #e2e8f0;">
-                <span style="font-size: 1.2rem;">{info['emoji']}</span>
-                <span style="font-weight: 700; color: {info['color']}; font-size: 0.9rem;">{level}</span>
+    # Always visible triage legend with modern cards
+    st.sidebar.markdown(f"**{legend_title}**")
+    
+    # Triage level cards
+    triage_data = [
+        ("🔴", "RED", "#dc2626", "#fee2e2", "Emergency" if lang == "en" else "Emergencia"),
+        ("🟠", "ORANGE", "#ea580c", "#ffedd5", "Urgent" if lang == "en" else "Urgente"),
+        ("🟡", "YELLOW", "#ca8a04", "#fef9c3", "Monitor" if lang == "en" else "Monitorear"),
+        ("🟢", "GREEN", "#059669", "#d1fae5", "Home Care" if lang == "en" else "Cuidado en Casa"),
+    ]
+    
+    for emoji, level, color, bg_color, desc in triage_data:
+        st.sidebar.markdown(f"""
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; 
+                    background: {bg_color}; border-radius: 10px; margin: 0.4rem 0; 
+                    border-left: 4px solid {color}; transition: transform 0.2s;">
+            <span style="font-size: 1.1rem;">{emoji}</span>
+            <div style="flex: 1;">
+                <span style="font-weight: 700; color: {color}; font-size: 0.85rem;">{level}</span>
+                <span style="color: #64748b; font-size: 0.75rem; margin-left: 0.5rem;">{desc}</span>
             </div>
-            """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_header(lang: str):
     """Render main header"""
@@ -224,11 +234,8 @@ def render_header(lang: str):
         unsafe_allow_html=True
     )
     
-    st.markdown(f"""
-    <div class="disclaimer-box">
-        {get_text("disclaimer", lang)}
-    </div>
-    """, unsafe_allow_html=True)
+    # Use st.warning for proper Markdown rendering
+    st.warning(get_text("disclaimer", lang))
 
 def render_chat():
     """Render chat history"""
@@ -550,232 +557,71 @@ def main():
             border: 2px solid #e2e8f0;
         }
         
-        /* Fixed Language Selector - Top Right */
-        .fixed-language-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            padding: 0.85rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideInRight 0.6s ease-out;
-        }
-        
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .fixed-language-selector:hover {
-            box-shadow: 0 12px 32px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        
-        .language-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0.85rem;
-        }
-        
-        .current-lang {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 0.95rem;
-            letter-spacing: -0.01em;
-        }
-        
-        .lang-switch-btn {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            cursor: pointer;
-            font-size: 1.15rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-        }
-        
-        .lang-switch-btn:hover {
-            transform: rotate(180deg) scale(1.1);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.5);
-        }
-        
-        /* Fixed Triage Legend - Bottom (Compacto y menos intrusivo) */
-        .fixed-triage-legend {
-            position: fixed;
-            bottom: 15px;
-            right: 20px;
-            z-index: 9998;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            padding: 0.75rem 1.25rem;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            max-width: 600px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* Estado minimizado por defecto */
-        .fixed-triage-legend.minimized {
-            padding: 0.65rem 1rem;
-            max-width: 200px;
-        }
-        
-        .fixed-triage-legend.minimized .legend-content {
-            display: none;
-        }
-        
-        .legend-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.75rem;
-            user-select: none;
-        }
-        
-        .fixed-triage-legend.minimized .legend-header {
-            margin-bottom: 0;
-        }
-        
-        .legend-title {
-            font-weight: 700;
-            color: #1e293b;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-        
-        .legend-toggle-icon {
-            color: #6366f1;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: transform 0.3s ease;
-        }
-        
-        .legend-header:hover .legend-toggle-icon {
-            transform: scale(1.2);
-        }
-        
-        .legend-content {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        
-        .legend-item {
-            display: flex;
+        /* Status badges for API */
+        .status-badge {
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.45rem 0.75rem;
-            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-            border-radius: 10px;
-            transition: all 0.2s ease;
-            border: 1px solid #e2e8f0;
-            cursor: default;
-        }
-        
-        .legend-item:hover {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-            border-color: #cbd5e1;
-        }
-        
-        .legend-emoji {
-            font-size: 1.15rem;
-        }
-        
-        .legend-level {
-            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             font-size: 0.85rem;
-            letter-spacing: -0.01em;
+            font-weight: 600;
         }
         
-        /* Adjust main content to avoid overlap with fixed elements */
-        .main .block-container {
-            padding-bottom: 120px !important;
-            padding-top: 80px !important;
+        .status-badge.ready {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+        
+        .status-badge.free {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+        }
+        
+        /* Powered by badge */
+        .powered-by {
+            text-align: center;
+            padding: 1rem;
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+        
+        .powered-by a {
+            color: #6366f1;
+            text-decoration: none;
         }
         
         /* Mobile responsive */
         @media (max-width: 768px) {
-            .fixed-language-selector {
-                top: 10px;
-                right: 10px;
-                padding: 0.5rem 0.75rem;
+            .main-header {
+                font-size: 2.5rem;
             }
             
-            .current-lang {
-                font-size: 0.85rem;
+            .sub-header {
+                font-size: 1.1rem;
             }
             
-            .lang-switch-btn {
-                width: 28px;
-                height: 28px;
-                font-size: 1rem;
+            .welcome-card {
+                padding: 2rem 1.5rem;
             }
             
-            .fixed-triage-legend {
-                bottom: 10px;
-                right: 10px;
-                padding: 0.6rem 0.85rem;
-                max-width: calc(100% - 20px);
-            }
-            
-            .fixed-triage-legend.minimized {
-                max-width: 180px;
-            }
-            
-            .legend-title {
-                font-size: 0.8rem;
-            }
-            
-            .legend-content {
-                gap: 0.5rem;
-            }
-            
-            .legend-item {
-                padding: 0.35rem 0.55rem;
-            }
-            
-            .legend-emoji {
-                font-size: 1rem;
-            }
-            
-            .legend-level {
-                font-size: 0.75rem;
+            .disclaimer-box {
+                padding: 1rem 1.25rem;
             }
         }
     </style>
     """, unsafe_allow_html=True)
     
-    # Sidebar
-    render_sidebar(lang)
+    # Sidebar - Language selector first
+    render_language_selector_sidebar(lang)
+    st.sidebar.divider()
     
     # Get API key and provider
     api_key, provider = get_api_key(lang)
+    st.sidebar.divider()
     
-    # Fixed elements (rendered first to be available throughout)
-    render_fixed_language_selector(lang)
+    # Rest of sidebar
+    render_sidebar(lang)
     
     # Main content
     render_header(lang)

@@ -12,11 +12,7 @@ TRANSLATIONS = {
         # Header
         "main_title": "🩺 PediSafe",
         "subtitle": "AI-Powered Pediatric Fever Triage Assistant",
-        "disclaimer": """
-            ⚠️ <strong>IMPORTANT:</strong> PediSafe is an INFORMATIONAL tool based on public guidelines 
-            (AAP, NHS). It does <strong>NOT replace</strong> professional medical consultation. 
-            If in doubt or in an emergency, contact your pediatrician or emergency services.
-        """,
+        "disclaimer": """⚠️ **IMPORTANT:** PediSafe is an INFORMATIONAL tool based on public guidelines (AAP, NHS). It does **NOT replace** professional medical consultation. If in doubt or in an emergency, contact your pediatrician or emergency services.""",
         
         # Sidebar
         "sidebar_title": "🩺 PediSafe",
@@ -165,11 +161,7 @@ RESPONSE FORMAT (MANDATORY):
         # Header
         "main_title": "🩺 PediSafe",
         "subtitle": "Asistente de Triaje Pediátrico con IA",
-        "disclaimer": """
-            ⚠️ <strong>IMPORTANTE:</strong> PediSafe es una herramienta INFORMATIVA basada en guías públicas 
-            (AAP, NHS). <strong>NO reemplaza</strong> la consulta médica profesional. 
-            Ante cualquier duda o emergencia, contacta a tu pediatra o servicios de emergencia.
-        """,
+        "disclaimer": """⚠️ **IMPORTANTE:** PediSafe es una herramienta INFORMATIVA basada en guías públicas (AAP, NHS). **NO reemplaza** la consulta médica profesional. Ante cualquier duda o emergencia, contacta a tu pediatra o servicios de emergencia.""",
         
         # Sidebar
         "sidebar_title": "🩺 PediSafe",

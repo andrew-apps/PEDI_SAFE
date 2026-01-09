@@ -60,10 +60,13 @@
 │  │     │ User Query   │                                     │   │
 │  │     └──────┬───────┘                                     │   │
 │  │            ↓                                              │   │
-│  │     ┌──────────────────────┐                             │   │
-│  │     │ OpenAI Embeddings    │ (text-embedding-3-small)    │   │
-│  │     │ Convert to Vector    │                             │   │
-│  │     └──────┬───────────────┘                             │   │
+│  │     ┌──────────────────────────────────────┐             │   │
+│  │     │ Embeddings (Multi-Provider)          │             │   │
+│  │     │ • Hugging Face (FREE, local)         │             │   │
+│  │     │   sentence-transformers/all-MiniLM   │             │   │
+│  │     │ • OpenAI text-embedding-3-small      │             │   │
+│  │     │ Convert to Vector                    │             │   │
+│  │     └──────┬───────────────────────────────┘             │   │
 │  │            ↓                                              │   │
 │  │     ┌──────────────────────┐                             │   │
 │  │     │ FAISS Vector Store   │ (Local, Free)               │   │
@@ -83,10 +86,12 @@
 │  │     └──────┬───────────────┘                             │   │
 │  │            ↓                                              │   │
 │  │  3. GENERATION (LLM Response)                            │   │
-│  │     ┌──────────────────────┐                             │   │
-│  │     │ GPT-4o-mini          │ (Cost-optimized)            │   │
-│  │     │ Temperature: 0.3     │ (Consistent)                │   │
-│  │     └──────┬───────────────┘                             │   │
+│  │     ┌──────────────────────────────────────┐             │   │
+│  │     │ LLM (Multi-Provider)                 │             │   │
+│  │     │ • Cerebras llama-3.3-70b (FREE)      │             │   │
+│  │     │ • OpenAI gpt-4o-mini                 │             │   │
+│  │     │ Temperature: 0.3 (Consistent)        │             │   │
+│  │     └──────┬───────────────────────────────┘             │   │
 │  │            ↓                                              │   │
 │  │     ┌──────────────────────┐                             │   │
 │  │     │ Structured Response  │                             │   │
@@ -190,11 +195,22 @@
 
 **Architecture Components:**
 
-#### 4.1 **Embeddings Module**
-- **Model**: `text-embedding-3-small` (OpenAI)
-- **Cost**: $0.02 per 1M tokens
+#### 4.1 **Embeddings Module** (Multi-Provider)
+
+**Option 1: Hugging Face (FREE - Default for Cerebras)**
+- **Model**: `sentence-transformers/all-MiniLM-L6-v2`
+- **Cost**: $0.00 (100% FREE)
 - **Purpose**: Convert text to vector representations
+- **Dimension**: 384 dimensions
+- **Storage**: ~80MB (downloaded on first use)
+- **Performance**: Excellent for semantic search
+- **Languages**: Optimized for English, works well with Spanish
+
+**Option 2: OpenAI (Default for OpenAI provider)**
+- **Model**: `text-embedding-3-small`
+- **Cost**: $0.02 per 1M tokens
 - **Dimension**: 1536 dimensions
+- **Performance**: State-of-the-art accuracy
 
 #### 4.2 **Vector Store**
 - **Technology**: FAISS (Facebook AI Similarity Search)
@@ -210,8 +226,19 @@
   - Chunk overlap: 200 characters
   - Separators: `\n## `, `\n### `, `\n`, ` `
 
-#### 4.4 **LLM Module**
-- **Model**: GPT-4o-mini
+#### 4.4 **LLM Module** (Multi-Provider)
+
+**Option 1: Cerebras (Recommended - Ultra Fast & Free)**
+- **Model**: `llama-3.3-70b`
+- **Provider**: Cerebras Cloud
+- **Cost**: FREE tier available
+- **Speed**: Ultra-fast inference (world's fastest)
+- **Temperature**: 0.3 (for consistency)
+- **API Base**: `https://api.cerebras.ai/v1`
+- **Purpose**: Generate structured triage responses
+
+**Option 2: OpenAI (Alternative)**
+- **Model**: `gpt-4o-mini`
 - **Cost**: $0.15/1M input tokens, $0.60/1M output tokens
 - **Temperature**: 0.3 (for consistency)
 - **Purpose**: Generate structured triage responses
@@ -342,29 +369,47 @@ User sees: 🔴 RED - EMERGENCY with clear action steps
 
 ### Cost Breakdown per Conversation
 
+**Configuration 1: Cerebras + Hugging Face (100% FREE)**
+
 | Component | Service | Cost per Use | Notes |
 |-----------|---------|--------------|-------|
-| **Embeddings** | text-embedding-3-small | ~$0.0001 | Initial knowledge base indexing (one-time) |
-| **Vector Search** | FAISS (local) | $0.00 | Free, runs locally |
+| **Embeddings** | Hugging Face (local) | $0.00 | FREE - Runs locally |
+| **Vector Search** | FAISS (local) | $0.00 | FREE - Runs locally |
+| **LLM Query** | Cerebras (llama-3.3-70b) | $0.00 | FREE tier |
+| **Total per Conversation** | - | **$0.00** | **Completely FREE!** |
+
+**Configuration 2: OpenAI (Pay-as-you-go)**
+
+| Component | Service | Cost per Use | Notes |
+|-----------|---------|--------------|-------|
+| **Embeddings** | text-embedding-3-small | ~$0.0001 | Initial indexing (one-time) |
+| **Vector Search** | FAISS (local) | $0.00 | FREE - Runs locally |
 | **LLM Query** | GPT-4o-mini | ~$0.001-0.005 | Per user message |
 | **Total per Conversation** | - | **~$0.001-0.005** | Less than 1 cent! |
 
 ### Cost Optimization Strategies
 
-1. **Model Selection**:
-   - Use `gpt-4o-mini` instead of `gpt-4` (90% cheaper)
-   - Use `text-embedding-3-small` instead of `text-embedding-ada-002` (50% cheaper)
+1. **Provider Selection**:
+   - **Cerebras + Hugging Face**: 100% FREE (Recommended)
+   - **OpenAI**: Pay-as-you-go (~$0.001-0.005 per conversation)
+   - Use `gpt-4o-mini` instead of `gpt-4` (90% cheaper if using OpenAI)
 
-2. **Local Vector Store**:
+2. **Embeddings Strategy**:
+   - **Hugging Face**: FREE, local, no API calls
+   - **OpenAI**: $0.02/1M tokens (only if using OpenAI LLM)
+   - Model downloaded once (~80MB), then cached locally
+
+3. **Local Vector Store**:
    - FAISS runs locally (no API costs)
+   - No cloud vector database needed
    - Alternative: Pinecone ($0.096/hour) or Weaviate (self-hosted)
 
-3. **BYOK Pattern**:
+4. **BYOK Pattern**:
    - Users can bring their own API keys
    - Demo key for initial testing
    - No ongoing hosting costs for API usage
 
-4. **Efficient Prompting**:
+5. **Efficient Prompting**:
    - Low temperature (0.3) for consistency
    - Structured output reduces token usage
    - Context window optimization (last 6 messages only)
@@ -525,8 +570,27 @@ TRANSLATIONS = {
 ## 🚀 Deployment Architecture
 
 ### Local Development
+
+**Option 1: Cerebras (100% FREE)**
 ```bash
 # Setup
+python -m venv venv
+venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+
+# Configure
+cp .env.example .env
+# Edit .env: CEREBRAS_API_KEY=csk-...
+# Get free key at: https://cloud.cerebras.ai
+
+# Run
+streamlit run app.py
+# First run will download embeddings model (~80MB)
+```
+
+**Option 2: OpenAI**
+```bash
+# Setup (same as above)
 python -m venv venv
 venv\Scripts\activate  # Windows
 pip install -r requirements.txt
@@ -633,7 +697,7 @@ streamlit run app.py
 | **Triage Structure** | Inconsistent responses | Standardized 4-level system (🔴🟠🟡🟢) |
 | **Source Citations** | Rarely cites sources | Every response includes AAP/NHS citations |
 | **Specialization** | Generalist (100+ domains) | Pediatric fever expert (1 domain) |
-| **Cost** | $20/month per user | ~$0.001-0.005 per conversation |
+| **Cost** | $20/month per user | **$0.00 (FREE with Cerebras)** or ~$0.001-0.005 (OpenAI) |
 | **Privacy** | Data sent to OpenAI/Anthropic | Can be self-hosted |
 | **Consistency** | Varies by prompt quality | Engineered prompts + low temperature |
 | **Medical Disclaimers** | Optional | Mandatory on every response |
@@ -653,10 +717,14 @@ streamlit run app.py
 
 ### Roadmap
 
-**Phase 1: Core Improvements** (Current)
+**Phase 1: Core Improvements** (Completed ✅)
 - ✅ Bilingual support (EN/ES)
-- ✅ Modern UI/UX
+- ✅ Modern UI/UX with responsive design
 - ✅ Comprehensive documentation
+- ✅ Multi-provider LLM support (Cerebras/OpenAI)
+- ✅ FREE embeddings with Hugging Face
+- ✅ Triage legend in sidebar
+- ✅ 100% FREE configuration option
 
 **Phase 2: Enhanced Intelligence** (Next 3 months)
 - [ ] Multi-language support (French, Mandarin, Hindi)
@@ -686,10 +754,12 @@ streamlit run app.py
 3. World Health Organization (WHO) - Pediatric Guidelines
 
 ### Technical Documentation
-1. LangChain Documentation: https://python.langchain.com
-2. FAISS Documentation: https://faiss.ai
-3. OpenAI API Reference: https://platform.openai.com/docs
-4. Streamlit Documentation: https://docs.streamlit.io
+1. **LangChain**: https://python.langchain.com
+2. **FAISS**: https://faiss.ai
+3. **Cerebras Inference**: https://inference-docs.cerebras.ai
+4. **Hugging Face Sentence Transformers**: https://www.sbert.net
+5. **OpenAI API**: https://platform.openai.com/docs
+6. **Streamlit**: https://docs.streamlit.io
 
 ---
 
