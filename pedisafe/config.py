@@ -57,11 +57,11 @@ IMPORTANTE: Al final de CADA respuesta, incluye este disclaimer:
 TRIAGE_RULES = {
     "red_flags": [
         "convulsión", "seizure", "convulsion",
-        "no respira", "dificultad respiratoria", "breathing difficulty",
+        "no respira", "dificultad para respirar", "breathing difficulty", "dificultad respiratoria",
         "piel azul", "blue skin", "cianosis",
-        "rigidez cuello", "stiff neck",
-        "inconsciente", "unresponsive", "no responde",
-        "manchas púrpuras", "purple spots", "petequias",
+        "cuello rígido", "rigidez de cuello", "stiff neck",
+        "inconsciente", "unresponsive", "no responde", "muy difícil de despertar",
+        "manchas púrpura", "purple spots", "petequias", "manchas de sangre",
         "fontanela abultada", "bulging fontanelle"
     ],
     "age_thresholds": {

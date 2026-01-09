@@ -162,9 +162,19 @@ def render_sidebar():
     # Sources
     st.sidebar.markdown("### 📚 Fuentes Médicas")
     st.sidebar.markdown("""
-    - [AAP HealthyChildren.org](https://healthychildren.org)
-    - [NHS UK](https://nhs.uk)
+    - [🌐 AAP HealthyChildren.org](https://healthychildren.org)
+    - [🌐 NHS UK](https://nhs.uk)
     """)
+    
+    # Knowledge base files
+    with st.sidebar.expander("📄 Archivos de Conocimiento"):
+        knowledge_path = Path(__file__).parent / "knowledge"
+        if knowledge_path.exists():
+            md_files = list(knowledge_path.glob("*.md"))
+            for file in sorted(md_files):
+                st.markdown(f"📄 `{file.name}`")
+        else:
+            st.warning("No se encontraron archivos de conocimiento")
     
     # Clear chat button
     st.sidebar.divider()

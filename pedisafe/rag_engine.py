@@ -97,9 +97,13 @@ class PediSafeRAG:
         """Capa A: Verificación determinista de señales de alarma"""
         message_lower = message.lower()
         
+        # Buscar coincidencias exactas de palabras completas
         for flag in TRIAGE_RULES["red_flags"]:
-            if flag.lower() in message_lower:
-                return True, flag
+            # Dividir el mensaje en palabras y buscar coincidencias exactas
+            words = message_lower.split()
+            for word in words:
+                if word == flag.lower():
+                    return True, flag
         
         return False, ""
     
