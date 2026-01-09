@@ -11,6 +11,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
@@ -22,10 +23,11 @@ from config import get_system_prompt, get_rag_template, TRIAGE_RULES
 class PediSafeRAG:
     """Motor RAG para el asistente de triaje pediátrico"""
     
-    def __init__(self, api_key: str, knowledge_dir: str = "knowledge", language: str = "en"):
+    def __init__(self, api_key: str, knowledge_dir: str = "knowledge", language: str = "en", provider: str = "openai"):
         self.api_key = api_key
         self.knowledge_dir = Path(knowledge_dir)
         self.language = language
+        self.provider = provider
         self.vectorstore = None
         self.retriever = None
         self.chain = None
@@ -36,11 +38,21 @@ class PediSafeRAG:
         self._setup_chain()
     
     def _setup_embeddings(self):
-        """Configura embeddings de OpenAI (text-embedding-3-small es más barato)"""
-        self.embeddings = OpenAIEmbeddings(
-            api_key=self.api_key,
-            model="text-embedding-3-small"  # Más barato: $0.02/1M tokens
-        )
+        """Configura embeddings según el proveedor"""
+        if self.provider == "cerebras":
+            # Cerebras no tiene embeddings propios
+            # Usar Hugging Face embeddings (100% GRATIS, sin API key necesaria)
+            print("🆓 Usando embeddings gratuitos de Hugging Face (sentence-transformers)")
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L6-v2",
+                model_kwargs={'device': 'cpu'},
+                encode_kwargs={'normalize_embeddings': True}
+            )
+        else:
+            self.embeddings = OpenAIEmbeddings(
+                api_key=self.api_key,
+                model="text-embedding-3-small"  # Más barato: $0.02/1M tokens
+            )
     
     def _load_knowledge_base(self):
         """Carga y vectoriza los documentos de conocimiento"""
@@ -70,12 +82,20 @@ class PediSafeRAG:
     
     def _setup_chain(self):
         """Configura la cadena RAG con LangChain"""
-        # Use GPT-4o-mini for cost efficiency
-        llm = ChatOpenAI(
-            api_key=self.api_key,
-            model="gpt-4o-mini",  # Más barato: $0.15/1M input, $0.60/1M output
-            temperature=0.3  # Bajo para respuestas más consistentes
-        )
+        if self.provider == "cerebras":
+            # Cerebras API es compatible con OpenAI SDK
+            llm = ChatOpenAI(
+                api_key=self.api_key,
+                model="llama-3.3-70b",
+                base_url="https://api.cerebras.ai/v1",
+                temperature=0.3
+            )
+        else:
+            llm = ChatOpenAI(
+                api_key=self.api_key,
+                model="gpt-4o-mini",  # Más barato: $0.15/1M input, $0.60/1M output
+                temperature=0.3  # Bajo para respuestas más consistentes
+            )
         
         # Create prompt template with language support
         system_prompt = get_system_prompt(self.language)

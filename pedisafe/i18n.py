@@ -21,13 +21,13 @@ TRANSLATIONS = {
         # Sidebar
         "sidebar_title": "🩺 PediSafe",
         "sidebar_subtitle": "*Pediatric Triage Assistant*",
-        "api_key_section": "🔑 API Key",
+        "api_key_section": "🔑 OpenAI API Key",
         "demo_key_available": "✅ Demo key available",
-        "use_own_key": "Use my own API Key",
-        "no_demo_key": "⚠️ No demo key - enter your API Key",
+        "use_own_key": "Use my own OpenAI API Key",
+        "no_demo_key": "⚠️ No demo key - enter your OpenAI API Key",
         "api_key_placeholder": "sk-...",
-        "api_key_help": "Your key is NOT stored. Only used in this session.",
-        "api_key_error": "API Key must start with 'sk-'",
+        "api_key_help": "Your key is NOT stored. Only used in this session. Get it from OpenAI (ChatGPT provider).",
+        "api_key_error": "OpenAI API Key must start with 'sk-'",
         "triage_levels_title": "📊 Triage Levels",
         "info_to_provide": "📋 Information to Provide",
         "info_list": """
@@ -54,7 +54,8 @@ TRANSLATIONS = {
         "triage_green_action": "Comfort measures and observation",
         
         # Main content
-        "configure_api": "👈 Please configure your API Key in the sidebar to begin.",
+        "configure_api": "Please configure your API key in the sidebar to start using PediSafe.",
+        "cerebras_free_note": "**Note:** Cerebras offers free API access with rate limits. Make sure you're using a valid API key from [cloud.cerebras.ai](https://cloud.cerebras.ai).",
         "example_title": "💡 Example of how to use PediSafe",
         "example_user": "**You:** My 4-month-old baby has a fever of 101.3°F (38.5°C) for the past 6 hours. He's a bit fussy but eating well.",
         "example_assistant": """**PediSafe:** 🟠 **ORANGE - HIGH PRIORITY**
@@ -113,12 +114,14 @@ MINIMUM QUESTIONS (if not yet provided)
 - Special conditions: immunodeficiency, heart disease, immunosuppressive treatments.
 
 STRUCTURED OUTPUT
-Always produce a response in English with:
-- Urgency level (🟢 GREEN / 🟡 YELLOW / 🟠 ORANGE / 🔴 RED)
-- What to do now (actions)
-- Warning signs to watch for
-- What information is missing (if applicable)
-- Sources/citations: list of URLs and titles of context fragments used.""",
+Always produce a response in English with this EXACT structure:
+1. **Urgency level** (🟢 GREEN / 🟡 YELLOW / 🟠 ORANGE / 🔴 RED) - First line, bold and prominent
+2. **What to do now** - Clear action steps
+3. **Warning signs to watch for** - Symptoms that require immediate attention
+4. **What information is missing** (if applicable) - Questions to ask
+5. **Medical Sources** (at the END) - List of URLs and titles of guidelines used
+
+IMPORTANT: Sources MUST be at the end of the response, after all recommendations.""",
         
         "rag_template": """CONTEXT (retrieved fragments; use as sole source of truth):
 {context}
@@ -132,13 +135,26 @@ USER MESSAGE:
 RESPONSE INSTRUCTIONS:
 1) If minimum data is missing, ask up to 3 short questions (maximum) before classifying.
 2) If there's sufficient data, classify the level: 🔴 RED / 🟠 ORANGE / 🟡 YELLOW / 🟢 GREEN.
-3) Summarize the reason in 1-2 lines and give concrete steps.
-4) Include "Sources" with title + URL for each fragment used.
-5) If the context doesn't allow a safe response, say "I don't know for certain" and recommend medical contact.
-6) Always respond in English in a clear and empathetic manner.
+3) Provide clear action steps and warning signs.
+4) If the context doesn't allow a safe response, say "I don't know for certain" and recommend medical contact.
+5) Always respond in English in a clear and empathetic manner.
 
-IMPORTANT: At the end of EVERY response, include this disclaimer:
-"⚠️ NOTICE: This information is for guidance only and does not replace consultation with a healthcare professional. If in doubt, consult your pediatrician."
+RESPONSE FORMAT (MANDATORY):
+**[Triage Level Emoji + Level]**
+
+**What to do now:**
+- [Action 1]
+- [Action 2]
+
+**Warning signs to watch for:**
+- [Sign 1]
+- [Sign 2]
+
+**Medical Sources:**
+- [Source 1 with URL]
+- [Source 2 with URL]
+
+⚠️ NOTICE: This information is for guidance only and does not replace consultation with a healthcare professional. If in doubt, consult your pediatrician.
 """,
     },
     "es": {
@@ -158,13 +174,13 @@ IMPORTANT: At the end of EVERY response, include this disclaimer:
         # Sidebar
         "sidebar_title": "🩺 PediSafe",
         "sidebar_subtitle": "*Asistente de Triaje Pediátrico*",
-        "api_key_section": "🔑 API Key",
+        "api_key_section": "🔑 API Key de OpenAI",
         "demo_key_available": "✅ Demo key disponible",
-        "use_own_key": "Usar mi propia API Key",
-        "no_demo_key": "⚠️ Sin demo key - ingresa tu API Key",
+        "use_own_key": "Usar mi propia API Key de OpenAI",
+        "no_demo_key": "⚠️ Sin demo key - ingresa tu API Key de OpenAI",
         "api_key_placeholder": "sk-...",
-        "api_key_help": "Tu key NO se almacena. Solo se usa en esta sesión.",
-        "api_key_error": "La API Key debe empezar con 'sk-'",
+        "api_key_help": "Tu key NO se almacena. Solo se usa en esta sesión. Consíguela de OpenAI (proveedor de ChatGPT).",
+        "api_key_error": "La API Key de OpenAI debe empezar con 'sk-'",
         "triage_levels_title": "📊 Niveles de Triaje",
         "info_to_provide": "📋 Información a Proporcionar",
         "info_list": """
@@ -251,12 +267,14 @@ PREGUNTAS MÍNIMAS (si aún no están)
 - Condiciones especiales: inmunodeficiencia, cardiopatía, tratamientos inmunosupresores.
 
 SALIDA ESTRUCTURADA
-Siempre produce una respuesta en español con:
-- Nivel de urgencia (🟢 VERDE / 🟡 AMARILLO / 🟠 NARANJA / 🔴 ROJO)
-- Qué hacer ahora (acciones)
-- Señales de alarma a vigilar
-- Qué información falta (si aplica)
-- Fuentes/citas: lista de URLs y títulos de los fragmentos usados del contexto.""",
+Siempre produce una respuesta en español con esta estructura EXACTA:
+1. **Nivel de urgencia** (🟢 VERDE / 🟡 AMARILLO / 🟠 NARANJA / 🔴 ROJO) - Primera línea, en negrita y prominente
+2. **Qué hacer ahora** - Pasos de acción claros
+3. **Señales de alarma a vigilar** - Síntomas que requieren atención inmediata
+4. **Qué información falta** (si aplica) - Preguntas a realizar
+5. **Fuentes Médicas** (al FINAL) - Lista de URLs y títulos de las guías utilizadas
+
+IMPORTANTE: Las fuentes DEBEN estar al final de la respuesta, después de todas las recomendaciones.""",
         
         "rag_template": """CONTEXTO (fragmentos recuperados; úsalo como única fuente de verdad):
 {context}
@@ -270,13 +288,26 @@ MENSAJE DEL USUARIO:
 INSTRUCCIONES DE RESPUESTA:
 1) Si faltan datos mínimos, haz hasta 3 preguntas cortas (máximo) antes de clasificar.
 2) Si hay datos suficientes, clasifica el nivel: 🔴 ROJO / 🟠 NARANJA / 🟡 AMARILLO / 🟢 VERDE.
-3) Resume la razón en 1–2 líneas y da pasos concretos.
-4) Incluye "Fuentes" con título + URL por cada fragmento usado.
-5) Si el contexto no permite responder con seguridad, di "No lo sé con certeza" y recomienda contacto médico.
-6) Responde siempre en español de forma clara y empática.
+3) Proporciona pasos de acción claros y señales de alarma.
+4) Si el contexto no permite responder con seguridad, di "No lo sé con certeza" y recomienda contacto médico.
+5) Responde siempre en español de forma clara y empática.
 
-IMPORTANTE: Al final de CADA respuesta, incluye este disclaimer:
-"⚠️ AVISO: Esta información es solo orientativa y no reemplaza la consulta con un profesional de salud. Ante cualquier duda, consulta a tu pediatra."
+FORMATO DE RESPUESTA (OBLIGATORIO):
+**[Emoji de Nivel de Triaje + Nivel]**
+
+**Qué hacer ahora:**
+- [Acción 1]
+- [Acción 2]
+
+**Señales de alarma a vigilar:**
+- [Señal 1]
+- [Señal 2]
+
+**Fuentes Médicas:**
+- [Fuente 1 con URL]
+- [Fuente 2 con URL]
+
+⚠️ AVISO: Esta información es solo orientativa y no reemplaza la consulta con un profesional de salud. Ante cualquier duda, consulta a tu pediatra.
 """,
     }
 }
