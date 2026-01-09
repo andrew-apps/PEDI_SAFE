@@ -16,15 +16,16 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
-from config import SYSTEM_PROMPT, RAG_TEMPLATE, TRIAGE_RULES
+from config import get_system_prompt, get_rag_template, TRIAGE_RULES
 
 
 class PediSafeRAG:
     """Motor RAG para el asistente de triaje pediátrico"""
     
-    def __init__(self, api_key: str, knowledge_dir: str = "knowledge"):
+    def __init__(self, api_key: str, knowledge_dir: str = "knowledge", language: str = "en"):
         self.api_key = api_key
         self.knowledge_dir = Path(knowledge_dir)
+        self.language = language
         self.vectorstore = None
         self.retriever = None
         self.chain = None
@@ -76,10 +77,13 @@ class PediSafeRAG:
             temperature=0.3  # Bajo para respuestas más consistentes
         )
         
-        # Create prompt template
+        # Create prompt template with language support
+        system_prompt = get_system_prompt(self.language)
+        rag_template = get_rag_template(self.language)
+        
         prompt = ChatPromptTemplate.from_messages([
-            ("system", SYSTEM_PROMPT),
-            ("human", RAG_TEMPLATE)
+            ("system", system_prompt),
+            ("human", rag_template)
         ])
         
         self.llm = llm
