@@ -110,11 +110,36 @@ class PediSafeRAG:
         self.prompt = prompt
     
     def _format_docs(self, docs: List[Document]) -> str:
-        """Formatea documentos recuperados para el contexto"""
+        """Formatea documentos recuperados para el contexto con URLs específicas"""
+        import re
         formatted = []
+        
+        # Map de archivos a URLs específicas
+        source_urls = {
+            "aap_fever_baby.md": ("Fever and Your Baby - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-and-Your-Baby.aspx"),
+            "aap_fever_without_fear.md": ("Fever Without Fear - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-Without-Fear.aspx"),
+            "aap_symptom_checker.md": ("Symptom Checker: Fever - AAP", "https://www.healthychildren.org/English/tips-tools/symptom-checker/Pages/symptomviewer.aspx?symptom=Fever+(0-12+Months)"),
+            "aap_when_to_call.md": ("When to Call the Pediatrician - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/When-to-Call-the-Pediatrician.aspx"),
+            "nhs_fever_children.md": ("High Temperature in Children - NHS", "https://www.nhs.uk/conditions/fever-in-children/"),
+            "unified_fever_guidelines.md": ("Unified Fever Guidelines", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
+            "fever_assessment_examples.md": ("Fever Assessment Examples", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
+            "test_case_validation.md": ("Clinical Validation Cases", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
+        }
+        
         for i, doc in enumerate(docs, 1):
-            source = doc.metadata.get("source", "Unknown")
-            formatted.append(f"[Fragmento {i}] (Fuente: {source})\n{doc.page_content}")
+            source_path = doc.metadata.get("source", "Unknown")
+            # Extraer nombre del archivo
+            source_file = Path(source_path).name if source_path != "Unknown" else "Unknown"
+            
+            # Obtener título y URL específica
+            if source_file in source_urls:
+                title, url = source_urls[source_file]
+                source_info = f"[{title}]({url})"
+            else:
+                source_info = source_file
+            
+            formatted.append(f"[Fragment {i}] Source: {source_info}\n{doc.page_content}")
+        
         return "\n\n---\n\n".join(formatted)
     
     def _check_red_flags(self, message: str) -> Tuple[bool, str]:

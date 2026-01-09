@@ -115,9 +115,14 @@ Always produce a response in English with this EXACT structure:
 2. **What to do now** - Clear action steps
 3. **Warning signs to watch for** - Symptoms that require immediate attention
 4. **What information is missing** (if applicable) - Questions to ask
-5. **Medical Sources** (at the END) - List of URLs and titles of guidelines used
+5. **Medical Sources** (at the END) - ONLY use URLs from the CONTEXT provided. DO NOT invent URLs.
 
-IMPORTANT: Sources MUST be at the end of the response, after all recommendations.""",
+CRITICAL RULES FOR SOURCES:
+- ONLY cite URLs that appear in the retrieved context fragments
+- Valid sources are ONLY: healthychildren.org (AAP) and nhs.uk (NHS)
+- Include the full URL exactly as shown in the context
+- Never use generic URLs like "cdc.gov" or "healthychildren.org" without the full path
+- Format: "Title - [URL]" for each source""",
         
         "rag_template": """CONTEXT (retrieved fragments; use as sole source of truth):
 {context}
@@ -146,11 +151,14 @@ RESPONSE FORMAT (MANDATORY):
 - [Sign 1]
 - [Sign 2]
 
-**Medical Sources:**
-- [Source 1 with URL]
-- [Source 2 with URL]
+**What information is missing:** (only if needed)
+- [Question 1]
 
-⚠️ NOTICE: This information is for guidance only and does not replace consultation with a healthcare professional. If in doubt, consult your pediatrician.
+**Medical Sources:**
+- [Title from context] - [EXACT URL from context]
+(ONLY use URLs that appear in the CONTEXT above. Do NOT invent or use generic URLs)
+
+⚠️ This information is for guidance only and does not replace professional medical consultation.
 """,
     },
     "es": {
@@ -264,9 +272,14 @@ Siempre produce una respuesta en español con esta estructura EXACTA:
 2. **Qué hacer ahora** - Pasos de acción claros
 3. **Señales de alarma a vigilar** - Síntomas que requieren atención inmediata
 4. **Qué información falta** (si aplica) - Preguntas a realizar
-5. **Fuentes Médicas** (al FINAL) - Lista de URLs y títulos de las guías utilizadas
+5. **Fuentes Médicas** (al FINAL) - SOLO usa URLs del CONTEXTO proporcionado. NO inventes URLs.
 
-IMPORTANTE: Las fuentes DEBEN estar al final de la respuesta, después de todas las recomendaciones.""",
+REGLAS CRÍTICAS PARA FUENTES:
+- SOLO cita URLs que aparezcan en los fragmentos de contexto recuperados
+- Las fuentes válidas son SOLO: healthychildren.org (AAP) y nhs.uk (NHS)
+- Incluye la URL completa exactamente como aparece en el contexto
+- Nunca uses URLs genéricas como "cdc.gov" o "healthychildren.org" sin la ruta completa
+- Formato: "Título - [URL]" para cada fuente""",
         
         "rag_template": """CONTEXTO (fragmentos recuperados; úsalo como única fuente de verdad):
 {context}
@@ -295,11 +308,14 @@ FORMATO DE RESPUESTA (OBLIGATORIO):
 - [Señal 1]
 - [Señal 2]
 
-**Fuentes Médicas:**
-- [Fuente 1 con URL]
-- [Fuente 2 con URL]
+**Qué información falta:** (solo si es necesario)
+- [Pregunta 1]
 
-⚠️ AVISO: Esta información es solo orientativa y no reemplaza la consulta con un profesional de salud. Ante cualquier duda, consulta a tu pediatra.
+**Fuentes Médicas:**
+- [Título del contexto] - [URL EXACTA del contexto]
+(SOLO usa URLs que aparezcan en el CONTEXTO de arriba. NO inventes URLs genéricas)
+
+⚠️ Esta información es solo orientativa y no reemplaza la consulta médica profesional.
 """,
     }
 }
