@@ -155,10 +155,12 @@ def render_sidebar(lang: str):
             - 💊 Medicamentos dados
             """)
     
-    # Medical Sources
+    # Medical Sources - ONLY official validated sources
     sources_title = "📚 Medical Sources" if lang == "en" else "📚 Fuentes Médicas"
+    note_text = "All medical advice is grounded in these 5 validated clinical guidelines." if lang == "en" else "Todos los consejos médicos se basan en estas 5 directrices clínicas validadas."
+    
     with st.sidebar.expander(sources_title, expanded=False):
-        st.markdown("""
+        st.markdown(f"""
         <div style="font-size: 0.85rem; line-height: 1.6;">
             <div style="margin-bottom: 0.75rem;">
                 <strong>🏥 American Academy of Pediatrics (AAP)</strong><br>
@@ -182,7 +184,7 @@ def render_sidebar(lang: str):
                 </a>
             </div>
             <div style="background: #fef3c7; padding: 0.5rem; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 0.75rem;">
-                <small><strong>ℹ️ Note:</strong> All medical advice is grounded in these validated clinical guidelines.</small>
+                <small><strong>ℹ️ Note:</strong> {note_text}</small>
             </div>
         </div>
         """, unsafe_allow_html=True)

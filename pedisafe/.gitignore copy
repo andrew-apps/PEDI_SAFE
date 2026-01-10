@@ -10,7 +10,7 @@ __pycache__/
 venv/
 env/
 .venv/
-venv
+
 # IDE
 .idea/
 .vscode/
@@ -24,20 +24,10 @@ venv
 *.faiss
 faiss_index/
 
-# Testing
-.pytest_cache/
-pedisafe/report.html
-pedisafe/.pytest_cache/
-htmlcov/
-.coverage
-*.cover
-.hypothesis/
-
 # OS
 .DS_Store
 Thumbs.db
-
-# Project specific
 /PROMPTS
 PROMPTS
 DEVPOST
+# rag

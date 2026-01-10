@@ -126,11 +126,14 @@ Validación: El comportamiento es más importante que la temperatura
 
 ### Error 3: Ignorar Factores de Edad
 ```
-Entrada: "2 meses, 37.8°C, bebé feliz"
+Entrada: "2 meses, 38.2°C, bebé feliz"
 
 Respuesta Incorrecta: 🟢 VERDE ❌
 Respuesta Correcta: 🔴 ROJO
-Validación: CUALQUIER fiebre <3 meses es emergencia
+Validación: CUALQUIER fiebre ≥38.0°C en <3 meses es emergencia
+
+NOTA IMPORTANTE: 37.8°C NO es fiebre (rango normal: 36.5-37.5°C). 
+Solo temperaturas ≥38.0°C (100.4°F) se consideran fiebre en bebés según AAP/NHS.
 ```
 
 ## 🎯 Criterios de Validación

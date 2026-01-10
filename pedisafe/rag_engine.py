@@ -133,15 +133,14 @@ class PediSafeRAG:
         import re
         formatted = []
         
-        # Map de archivos a URLs específicas (solo fuentes médicas validadas)
+        # Map de archivos a URLs específicas - SOLO fuentes oficiales AAP/NHS
+        # NO incluir documentos internos consolidados o ejemplos
         source_urls = {
             "aap_fever_baby.md": ("Fever and Your Baby - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-and-Your-Baby.aspx"),
             "aap_fever_without_fear.md": ("Fever Without Fear - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-Without-Fear.aspx"),
             "aap_symptom_checker.md": ("Symptom Checker: Fever - AAP", "https://www.healthychildren.org/English/tips-tools/symptom-checker/Pages/symptomviewer.aspx?symptom=Fever+(0-12+Months)"),
             "aap_when_to_call.md": ("When to Call the Pediatrician - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/When-to-Call-the-Pediatrician.aspx"),
             "nhs_fever_children.md": ("High Temperature in Children - NHS", "https://www.nhs.uk/conditions/fever-in-children/"),
-            "unified_fever_guidelines.md": ("Unified Fever Guidelines - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
-            "fever_assessment_examples.md": ("Fever Assessment Examples - AAP", "https://www.healthychildren.org/English/health-issues/conditions/fever/"),
         }
         
         for i, doc in enumerate(docs, 1):
@@ -164,48 +163,72 @@ class PediSafeRAG:
         """Capa A: Verificación determinista de señales de alarma"""
         message_lower = message.lower()
         
-        # Buscar coincidencias exactas de palabras completas
+        # CRÍTICO: Verificar edad + fiebre ANTES de buscar red flags textuales
+        age_temp_data = self._extract_age_temp(message)
+        
+        # Regla AAP: CUALQUIER fiebre en <3 meses es EMERGENCIA
+        if age_temp_data["age_months"] is not None and age_temp_data["temp_c"] is not None:
+            age_months = age_temp_data["age_months"]
+            temp_c = age_temp_data["temp_c"]
+            
+            # <3 meses con temp >= 38.0°C = RED FLAG automático
+            if age_months < 3 and temp_c >= 38.0:
+                return True, f"bebé <3 meses con fiebre {temp_c}°C"
+            
+            # 3-6 meses con temp >= 39.0°C = RED FLAG
+            if 3 <= age_months < 6 and temp_c >= 39.0:
+                return True, f"bebé 3-6 meses con fiebre alta {temp_c}°C"
+        
+        # Buscar red flags textuales (síntomas críticos)
         for flag in TRIAGE_RULES["red_flags"]:
-            # Dividir el mensaje en palabras y buscar coincidencias exactas
-            words = message_lower.split()
-            for word in words:
-                if word == flag.lower():
-                    return True, flag
+            if flag.lower() in message_lower:
+                return True, flag
         
         return False, ""
     
     def _extract_age_temp(self, message: str) -> dict:
-        """Extrae edad y temperatura del mensaje si están presentes"""
+        """Extrae edad y temperatura del mensaje con alta precisión"""
         import re
         
         result = {"age_months": None, "temp_c": None}
+        message_lower = message.lower()
         
-        # Buscar edad en meses
+        # Buscar edad - PRIORIDAD: meses explícitos
         age_patterns = [
-            r"(\d+)\s*meses?",
-            r"(\d+)\s*months?",
-            r"bebé?\s*de\s*(\d+)",
+            (r"(\d+)\s*meses?", 1),           # "8 meses" -> meses
+            (r"(\d+)\s*months?", 1),          # "8 months" -> meses
+            (r"(\d+)\s*años?", 12),           # "3 años" -> 36 meses
+            (r"(\d+)\s*years?", 12),          # "3 years" -> 36 meses
+            (r"(\d+)\s*semanas?", 0.25),      # "4 semanas" -> 1 mes
+            (r"(\d+)\s*weeks?", 0.25),        # "4 weeks" -> 1 mes
+            (r"bebé?\s*de\s*(\d+)", 1),       # "bebé de 2" -> 2 meses
+            (r"(\d+)[-\s]?(month|mes)", 1),   # "2-month" -> 2 meses
         ]
-        for pattern in age_patterns:
-            match = re.search(pattern, message.lower())
+        
+        for pattern, multiplier in age_patterns:
+            match = re.search(pattern, message_lower)
             if match:
-                result["age_months"] = int(match.group(1))
+                age_value = float(match.group(1))
+                result["age_months"] = int(age_value * multiplier)
                 break
         
-        # Buscar temperatura
+        # Buscar temperatura con múltiples formatos
         temp_patterns = [
-            r"(\d+\.?\d*)\s*°?\s*[cC]",
-            r"(\d+\.?\d*)\s*grados",
-            r"temperatura\s*:?\s*(\d+\.?\d*)",
+            r"(\d+\.?\d*)\s*°?\s*[cC](?:\s|,|$)",  # 38.5°C o 38.5 C
+            r"(\d+\.?\d*)\s*grados",                # 38.5 grados
+            r"temperatura\s*:?\s*(\d+\.?\d*)",      # temperatura: 38.5
+            r"(\d+\.?\d*)\s*°?\s*[fF]",             # 101°F (Fahrenheit)
+            r"temp\w*\s*:?\s*(\d+\.?\d*)",          # temp: 38.5
         ]
+        
         for pattern in temp_patterns:
-            match = re.search(pattern, message)
+            match = re.search(pattern, message_lower)
             if match:
                 temp = float(match.group(1))
-                # Si parece Fahrenheit, convertir
-                if temp > 45:
+                # Detectar y convertir Fahrenheit
+                if temp > 45 or 'f' in pattern.lower():
                     temp = (temp - 32) * 5/9
-                result["temp_c"] = temp
+                result["temp_c"] = round(temp, 1)
                 break
         
         return result
