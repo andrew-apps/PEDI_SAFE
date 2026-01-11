@@ -1,141 +1,141 @@
-# PediSafe - Changelog de Mejoras
+# PediSafe - Improvements Changelog
 
-## Versión 2.0 - Mejoras Significativas (Enero 2026)
+## Version 2.0 - Significant Improvements (January 2026)
 
-### 🌐 Sistema Bilingüe Completo
+### 🌐 Complete Bilingual System
 
-**Implementado:**
-- ✅ Nuevo módulo `i18n.py` con soporte completo para inglés y español
-- ✅ Inglés como idioma primario (target: audiencia internacional/US)
-- ✅ Español como idioma secundario (accesibilidad)
-- ✅ Selector de idioma en tiempo real en la barra lateral
-- ✅ Más de 50 claves de traducción cubriendo toda la interfaz
-- ✅ Prompts del sistema traducidos para respuestas en el idioma seleccionado
-- ✅ Cambio de idioma sin pérdida de contexto
+**Implemented:**
+- ✅ New `i18n.py` module with full support for English and Spanish
+- ✅ English as primary language (target: international/US audience)
+- ✅ Spanish as secondary language (accessibility)
+- ✅ Real-time language selector in sidebar
+- ✅ Over 50 translation keys covering the entire interface
+- ✅ Translated system prompts for responses in selected language
+- ✅ Language switching without context loss
 
-**Archivos modificados:**
-- `i18n.py` (NUEVO) - Sistema de internacionalización
-- `config.py` - Funciones para obtener configuración por idioma
-- `rag_engine.py` - Soporte para prompts bilingües
-- `app.py` - Interfaz completamente bilingüe
+**Modified files:**
+- `i18n.py` (NEW) - Internationalization system
+- `config.py` - Functions to get configuration by language
+- `rag_engine.py` - Bilingual prompts support
+- `app.py` - Fully bilingual interface
 
-### 🎨 Mejoras Significativas de UI/UX
+### 🎨 Significant UI/UX Improvements
 
-**Diseño Moderno:**
-- ✅ Gradientes modernos en títulos y elementos visuales
-- ✅ Tarjetas de triaje con efectos hover y sombras
-- ✅ Esquema de colores profesional con variables CSS
-- ✅ Tipografía mejorada con mejor jerarquía visual
-- ✅ Diseño responsive optimizado para móviles
-- ✅ Animaciones sutiles para mejor experiencia
+**Modern Design:**
+- ✅ Modern gradients in titles and visual elements
+- ✅ Triage cards with hover effects and shadows
+- ✅ Professional color scheme with CSS variables
+- ✅ Improved typography with better visual hierarchy
+- ✅ Responsive design optimized for mobile
+- ✅ Subtle animations for better experience
 
-**Mejoras de Usabilidad:**
-- ✅ Selector de idioma prominente en la barra lateral
-- ✅ Tarjeta de bienvenida con gradiente y diseño atractivo
-- ✅ Mensajes de error más claros y contextuales
-- ✅ Indicadores visuales de estado (API key, carga, etc.)
-- ✅ Botones con efectos hover y feedback visual
-- ✅ Disclaimer más visible con diseño de alerta
+**Usability Improvements:**
+- ✅ Prominent language selector in sidebar
+- ✅ Welcome card with gradient and attractive design
+- ✅ Clearer and contextual error messages
+- ✅ Visual status indicators (API key, loading, etc.)
+- ✅ Buttons with hover effects and visual feedback
+- ✅ More visible disclaimer with alert design
 
-**Código CSS:**
+**CSS Code:**
 ```css
-/* Nuevos estilos implementados */
-- Gradientes lineales para elementos principales
-- Sistema de colores con variables CSS
-- Efectos de transformación en hover
-- Sombras y profundidad visual
-- Bordes redondeados consistentes
-- Espaciado y padding optimizados
+/* New implemented styles */
+- Linear gradients for main elements
+- Color system with CSS variables
+- Transform effects on hover
+- Shadows and visual depth
+- Consistent rounded borders
+- Optimized spacing and padding
 ```
 
-### 📚 Documentación Arquitectónica Detallada
+### 📚 Detailed Architectural Documentation
 
-**Nuevos Documentos:**
+**New Documents:**
 
-1. **`DOCS/ARCHITECTURE.md`** (Completo)
-   - Diagrama de arquitectura detallado con 3 capas
-   - Explicación de cada componente del sistema
-   - Flujo completo de request-response con ejemplo
-   - Desglose de costos por componente
-   - Métricas de rendimiento
-   - Consideraciones de seguridad y privacidad
-   - Roadmap de futuras mejoras
-   - 400+ líneas de documentación técnica
+1. **`DOCS/ARCHITECTURE.md`** (Complete)
+   - Detailed architecture diagram with 3 layers
+   - Explanation of each system component
+   - Complete request-response flow with example
+   - Cost breakdown by component
+   - Performance metrics
+   - Security and privacy considerations
+   - Roadmap for future improvements
+   - 400+ lines of technical documentation
 
-2. **`DOCS/WHY_NOT_GENERIC_AI.md`** (Completo)
-   - Comparación detallada con ChatGPT/Claude
-   - 10 aspectos comparados con tablas y ejemplos
-   - Casos de uso reales donde PediSafe gana
-   - Análisis cuantitativo (100 casos de prueba)
-   - Explicación de cuándo usar cada solución
-   - 300+ líneas de análisis comparativo
+2. **`DOCS/WHY_NOT_GENERIC_AI.md`** (Complete)
+   - Detailed comparison with ChatGPT/Claude
+   - 10 compared aspects with tables and examples
+   - Real use cases where PediSafe wins
+   - Quantitative analysis (100 test cases)
+   - Explanation of when to use each solution
+   - 300+ lines of comparative analysis
 
-3. **`DOCS/CHANGELOG.md`** (Este archivo)
-   - Registro de todos los cambios realizados
-   - Detalles técnicos de implementación
-   - Guía de migración
+3. **`DOCS/CHANGELOG.md`** (This file)
+   - Record of all changes made
+   - Technical implementation details
+   - Migration guide
 
-### 📖 README Mejorado
+### 📖 Improved README
 
-**Mejoras implementadas:**
-- ✅ Badges adicionales (License, Bilingual)
-- ✅ Sección "Problem Statement" expandida con estadísticas
-- ✅ Nueva sección "Why Not Just Use ChatGPT?" con tabla comparativa
-- ✅ Tabla de características expandida (10 features)
-- ✅ Diagrama de arquitectura mejorado con 3 capas
-- ✅ Instrucciones de instalación más detalladas (3 opciones de configuración)
-- ✅ Ejemplo de uso con query y respuesta esperada
-- ✅ Sección de comparación de costos
-- ✅ Guía de testing manual
-- ✅ Sección de contribución expandida
-- ✅ Alineación con criterios de jueces de Alameda Hacks
-- ✅ Disclaimer médico prominente al final
+**Implemented improvements:**
+- ✅ Additional badges (License, Bilingual)
+- ✅ Expanded "Problem Statement" section with statistics
+- ✅ New "Why Not Just Use ChatGPT?" section with comparative table
+- ✅ Expanded features table (10 features)
+- ✅ Improved architecture diagram with 3 layers
+- ✅ More detailed installation instructions (3 configuration options)
+- ✅ Usage example with query and expected response
+- ✅ Cost comparison section
+- ✅ Manual testing guide
+- ✅ Expanded contribution section
+- ✅ Alignment with Alameda Hacks judges criteria
+- ✅ Prominent medical disclaimer at the end
 
-### 🔧 Mejoras Técnicas
+### 🔧 Technical Improvements
 
-**Arquitectura:**
-- ✅ Separación de concerns (i18n, config, UI, RAG)
-- ✅ Funciones para obtener configuración dinámica por idioma
-- ✅ Sistema de traducciones centralizado
-- ✅ Mejor manejo de estado de sesión
+**Architecture:**
+- ✅ Separation of concerns (i18n, config, UI, RAG)
+- ✅ Functions to get dynamic configuration by language
+- ✅ Centralized translation system
+- ✅ Better session state management
 
-**Código:**
-- ✅ Backup del `app.py` original (`app_backup.py`)
-- ✅ Nueva versión de `app.py` con todas las mejoras
-- ✅ Código más limpio y mantenible
-- ✅ Comentarios en inglés para audiencia internacional
+**Code:**
+- ✅ Backup of original `app.py` (`app_backup.py`)
+- ✅ New version of `app.py` with all improvements
+- ✅ Cleaner and more maintainable code
+- ✅ Comments in English for international audience
 
-### 📊 Análisis: ¿Puede un Agente IA Genérico Reemplazar PediSafe?
+### 📊 Analysis: Can a Generic AI Agent Replace PediSafe?
 
-**Respuesta: NO**
+**Answer: NO**
 
-**Razones clave:**
+**Key reasons:**
 
-1. **Seguridad**: PediSafe tiene Capa A determinística que SIEMPRE detecta red flags
-2. **Conocimiento**: RAG con guías AAP/NHS actuales vs. datos de entrenamiento genéricos
-3. **Consistencia**: Mismo input = mismo output (no con ChatGPT)
-4. **Trazabilidad**: Cada respuesta cita fuentes específicas
-5. **Costo**: $0.001-0.005 por query vs. $20/mes
-6. **Privacidad**: Puede ser self-hosted vs. servidores de terceros
-7. **Especialización**: 100% enfocado en triaje pediátrico
-8. **Compliance**: Puede ser HIPAA-compliant
+1. **Safety**: PediSafe has deterministic Layer A that ALWAYS detects red flags
+2. **Knowledge**: RAG with current AAP/NHS guidelines vs. generic training data
+3. **Consistency**: Same input = same output (not with ChatGPT)
+4. **Traceability**: Each response cites specific sources
+5. **Cost**: $0.001-0.005 per query vs. $20/month
+6. **Privacy**: Can be self-hosted vs. third-party servers
+7. **Specialization**: 100% focused on pediatric triage
+8. **Compliance**: Can be HIPAA-compliant
 
-**Documentación completa en:** `DOCS/WHY_NOT_GENERIC_AI.md`
+**Complete documentation at:** `DOCS/WHY_NOT_GENERIC_AI.md`
 
-### 🎯 Impacto en Alameda Hacks 2026
+### 🎯 Impact on Alameda Hacks 2026
 
-**Criterios de Jueces - Alineación:**
+**Judges Criteria - Alignment:**
 
-| Criterio | Cómo PediSafe lo cumple |
+| Criterion | How PediSafe meets it |
 |----------|-------------------------|
-| **Impacto** | Reduce visitas innecesarias a ER ($4.4B/año en US) |
-| **UI/UX** | Interfaz moderna, intuitiva, bilingüe, diseñada para padres estresados |
-| **Documentación** | 3 documentos técnicos detallados (700+ líneas) |
-| **Funcionalidad** | Demo completamente funcional con guías médicas reales |
-| **Innovación** | Arquitectura multi-capa (no es "ChatGPT wrapper") |
-| **Startup-Ready** | Modelo BYOK, escalable, valor claro, compliance posible |
+| **Impact** | Reduces unnecessary ER visits ($4.4B/year in US) |
+| **UI/UX** | Modern, intuitive, bilingual interface designed for stressed parents |
+| **Documentation** | 3 detailed technical documents (700+ lines) |
+| **Functionality** | Fully functional demo with real medical guidelines |
+| **Innovation** | Multi-layer architecture (not a "ChatGPT wrapper") |
+| **Startup-Ready** | BYOK model, scalable, clear value, compliance possible |
 
-### 📁 Estructura de Archivos Actualizada
+### 📁 Updated File Structure
 
 ```
 pedisafe/
@@ -158,91 +158,91 @@ DOCS/                         # ✨ NUEVO - Carpeta de documentación
 └── CHANGELOG.md              # ✨ NUEVO - Este archivo
 ```
 
-### 🚀 Cómo Probar las Mejoras
+### 🚀 How to Test Improvements
 
-1. **Probar Sistema Bilingüe:**
+1. **Test Bilingual System:**
    ```bash
    streamlit run app.py
-   # En la barra lateral, cambia entre English/Español
-   # Verifica que toda la UI cambia de idioma
+   # In the sidebar, switch between English/Español
+   # Verify that the entire UI changes language
    ```
 
-2. **Probar Nueva UI:**
-   - Observa los gradientes en el título
-   - Hover sobre las tarjetas de triaje
-   - Verifica la tarjeta de bienvenida con diseño moderno
-   - Prueba en móvil (responsive)
+2. **Test New UI:**
+   - Observe gradients in the title
+   - Hover over triage cards
+   - Check welcome card with modern design
+   - Test on mobile (responsive)
 
-3. **Revisar Documentación:**
-   - Lee `DOCS/ARCHITECTURE.md` para entender la arquitectura
-   - Lee `DOCS/WHY_NOT_GENERIC_AI.md` para el análisis comparativo
-   - Revisa README.md actualizado
+3. **Review Documentation:**
+   - Read `DOCS/ARCHITECTURE.md` to understand architecture
+   - Read `DOCS/WHY_NOT_GENERIC_AI.md` for comparative analysis
+   - Review updated README.md
 
-### 📝 Notas de Migración
+### 📝 Migration Notes
 
-**Si tienes la versión anterior:**
+**If you have the previous version:**
 
-1. Haz backup de tu `app.py` actual
-2. Actualiza los archivos:
-   - `app.py` (reemplazar)
-   - `config.py` (reemplazar)
-   - `rag_engine.py` (reemplazar)
-   - `i18n.py` (agregar nuevo)
-3. No hay cambios en `requirements.txt`
-4. No hay cambios en la carpeta `knowledge/`
-5. Reinicia la aplicación
+1. Backup your current `app.py`
+2. Update files:
+   - `app.py` (replace)
+   - `config.py` (replace)
+   - `rag_engine.py` (replace)
+   - `i18n.py` (add new)
+3. No changes to `requirements.txt`
+4. No changes to `knowledge/` folder
+5. Restart the application
 
-**Compatibilidad:**
-- ✅ Compatible con versiones anteriores de la base de conocimientos
-- ✅ Compatible con API keys existentes
-- ✅ No requiere cambios en deployment
-- ✅ Session state se mantiene al cambiar idioma
+**Compatibility:**
+- ✅ Compatible with previous knowledge base versions
+- ✅ Compatible with existing API keys
+- ✅ No deployment changes required
+- ✅ Session state maintained when changing language
 
-### 🐛 Problemas Conocidos y Soluciones
+### 🐛 Known Issues and Solutions
 
-**Ninguno identificado hasta ahora.**
+**None identified so far.**
 
-Si encuentras algún problema:
-1. Verifica que todos los archivos estén actualizados
-2. Revisa que `i18n.py` esté en la misma carpeta que `app.py`
-3. Reinicia la aplicación Streamlit
-4. Limpia el cache del navegador
+If you encounter any problems:
+1. Verify all files are updated
+2. Check that `i18n.py` is in the same folder as `app.py`
+3. Restart Streamlit application
+4. Clear browser cache
 
-### 🎉 Resumen de Logros
+### 🎉 Achievements Summary
 
-**Líneas de código agregadas:** ~1,500+
-**Documentación agregada:** ~1,000+ líneas
-**Archivos nuevos:** 4
-**Archivos modificados:** 4
-**Idiomas soportados:** 2 (EN, ES)
-**Mejoras de UI:** 15+
-**Tiempo de desarrollo:** ~2 horas
+**Lines of code added:** ~1,500+
+**Documentation added:** ~1,000+ lines
+**New files:** 4
+**Modified files:** 4
+**Supported languages:** 2 (EN, ES)
+**UI improvements:** 15+
+**Development time:** ~2 hours
 
-### 🔮 Próximos Pasos Sugeridos
+### 🔮 Suggested Next Steps
 
 1. **Testing:**
-   - Agregar tests unitarios para i18n
-   - Tests de integración para RAG bilingüe
-   - Tests de UI con Playwright
+   - Add unit tests for i18n
+   - Integration tests for bilingual RAG
+   - UI tests with Playwright
 
-2. **Idiomas Adicionales:**
-   - Francés
-   - Mandarín
+2. **Additional Languages:**
+   - French
+   - Mandarin
    - Hindi
 
 3. **Features:**
-   - Exportar conversación a PDF
-   - Historial de consultas
-   - Integración con telemedicina
+   - Export conversation to PDF
+   - Consultation history
+   - Telemedicine integration
 
 4. **Deployment:**
-   - Deploy a Streamlit Community Cloud
-   - Configurar dominio personalizado
-   - Analytics de uso
+   - Deploy to Streamlit Community Cloud
+   - Configure custom domain
+   - Usage analytics
 
 ---
 
-**Desarrollado para Alameda Hacks 2026**
+**Developed for Alameda Hacks 2026**
 **Track: Social Good + ML/AI**
 
-*Todas las mejoras implementadas con éxito. La aplicación está lista para demo y evaluación.*
+*All improvements successfully implemented. The application is ready for demo and evaluation.*
