@@ -27,7 +27,7 @@ AI-powered pediatric triage system that helps parents determine the urgency leve
 
 ## 🚀 Quick Start
 
-### Option 1: Run the Application
+### Option 1: Run the Application (Local)
 
 ```bash
 # Activate virtual environment
@@ -40,7 +40,26 @@ pip install -r pedisafe/requirements.txt
 streamlit run pedisafe/app.py
 ```
 
-### Option 2: Run Tests
+### Option 2: Run with Docker 🐳
+
+```bash
+# Navigate to pedisafe directory
+cd pedisafe
+
+# Create .env file with your API key
+echo "CEREBRAS_API_KEY=your-key-here" > .env
+
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or run with Docker directly
+docker build -t pedisafe .
+docker run -p 8501:8501 --env-file .env pedisafe
+```
+
+The app will open at `http://localhost:8501`
+
+### Option 3: Run Tests
 
 ```bash
 # Activate virtual environment
