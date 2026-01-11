@@ -1,233 +1,233 @@
-# 🏥 PediSafe - Asistente Pediátrico Inteligente
+# 🏥 PediSafe - Intelligent Pediatric Assistant
 
-Sistema de triaje pediátrico basado en IA que ayuda a padres a determinar el nivel de urgencia de síntomas en niños, siguiendo las guías oficiales de AAP (American Academy of Pediatrics) y NHS UK.
-
----
-
-## 🎯 Características Principales
-
-- **Triaje por Niveles de Color:**
-  - 🔴 **ROJO:** Emergencia - Ir a urgencias inmediatamente
-  - 🟠 **NARANJA:** Urgente - Contactar pediatra hoy
-  - 🟡 **AMARILLO:** Consulta - Contactar en 24 horas
-  - 🟢 **VERDE:** Monitoreo en casa
-
-- **Arquitectura RAG (Retrieval-Augmented Generation):**
-  - Capa A: Detección determinística de red flags
-  - Capa B: Análisis contextual con LLM (Cerebras)
-  - Base de conocimiento: 5 documentos oficiales AAP/NHS
-
-- **Suite de Tests Automáticos:**
-  - 16 casos de prueba validados
-  - Cobertura de casos críticos de seguridad
-  - Validación de no-alucinaciones
-  - Generación de reportes HTML
+AI-powered pediatric triage system that helps parents determine the urgency level of children's symptoms, following official AAP (American Academy of Pediatrics) and NHS UK guidelines.
 
 ---
 
-## 🚀 Inicio Rápido
+## 🎯 Main Features
 
-### Opción 1: Ejecutar la Aplicación
+- **Color-Coded Triage Levels:**
+  - 🔴 **RED:** Emergency - Go to ER immediately
+  - 🟠 **ORANGE:** Urgent - Contact pediatrician today
+  - 🟡 **YELLOW:** Consultation - Contact within 24 hours
+  - 🟢 **GREEN:** Home monitoring
+
+- **RAG Architecture (Retrieval-Augmented Generation):**
+  - Layer A: Deterministic red flag detection
+  - Layer B: Contextual analysis with LLM (Cerebras)
+  - Knowledge base: 5 official AAP/NHS documents
+
+- **Automated Test Suite:**
+  - 16 validated test cases
+  - Critical safety case coverage
+  - Non-hallucination validation
+  - HTML report generation
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Run the Application
 
 ```bash
-# Activar entorno virtual
+# Activate virtual environment
 venv\Scripts\activate
 
-# Instalar dependencias
+# Install dependencies
 pip install -r pedisafe/requirements.txt
 
-# Ejecutar aplicación Streamlit
+# Run Streamlit application
 streamlit run pedisafe/app.py
 ```
 
-### Opción 2: Ejecutar Tests
+### Option 2: Run Tests
 
 ```bash
-# Activar entorno virtual
+# Activate virtual environment
 venv\Scripts\activate
 
-# Ejecutar suite de tests
+# Run test suite
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v
 
-# Generar reporte HTML
+# Generate HTML report
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v --html=pedisafe/report.html --self-contained-html
 ```
 
-**Para instrucciones completas de setup, ver:** [`SETUP_TESTS.md`](SETUP_TESTS.md)
+**For complete setup instructions, see:** [`SETUP_TESTS.md`](SETUP_TESTS.md)
 
 ---
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 1_ALAMEDA_HACKS/
-├── pedisafe/                      # Aplicación principal
-│   ├── app.py                    # Interfaz Streamlit
-│   ├── rag_engine.py             # Motor RAG con LangChain
-│   ├── test_pedisafe.py          # Suite de tests
-│   ├── pytest.ini                # Configuración pytest
-│   ├── report.html               # Reporte de tests (generado)
-│   ├── requirements.txt          # Dependencias Python
-│   ├── knowledge/                # Base de conocimiento (5 archivos .md)
+├── pedisafe/                      # Main application
+│   ├── app.py                    # Streamlit interface
+│   ├── rag_engine.py             # RAG engine with LangChain
+│   ├── test_pedisafe.py          # Test suite
+│   ├── pytest.ini                # Pytest configuration
+│   ├── report.html               # Test report (generated)
+│   ├── requirements.txt          # Python dependencies
+│   ├── knowledge/                # Knowledge base (5 .md files)
 │   │   ├── aap_fever_baby.md
 │   │   ├── aap_fever_without_fear.md
 │   │   ├── aap_symptom_checker.md
 │   │   ├── aap_when_to_call.md
 │   │   └── nhs_fever_children.md
 │   └── .streamlit/
-│       ├── config.toml           # Configuración Streamlit
-│       └── secrets.toml.example  # Plantilla para API keys
-├── DOCS/                         # Documentación del hackathon
-│   └── test_case_validation.md   # Validación de casos de prueba
-├── venv/                         # Entorno virtual (no en Git)
-├── SETUP_TESTS.md                # 📘 Instrucciones de testing
-├── TESTS_FINALES.md              # 📊 Resultados de tests
-├── RUN_TESTS.bat                 # Script ejecutor Windows
-├── .gitignore                    # Archivos ignorados
-└── README.md                     # Este archivo
+│       ├── config.toml           # Streamlit configuration
+│       └── secrets.toml.example  # API keys template
+├── DOCS/                         # Hackathon documentation
+│   └── test_case_validation.md   # Test case validation
+├── venv/                         # Virtual environment (not in Git)
+├── SETUP_TESTS.md                # 📘 Testing instructions
+├── TESTS_FINALES.md              # 📊 Test results
+├── RUN_TESTS.bat                 # Windows runner script
+├── .gitignore                    # Ignored files
+└── README.md                     # This file
 ```
 
 ---
 
-## 🧪 Sistema de Testing
+## 🧪 Testing System
 
-### Tests Implementados
+### Implemented Tests
 
-**16 casos de prueba totales:**
-- ✅ **8 casos críticos de seguridad** (fiebre <3 meses, red flags)
-- ✅ **4 casos edge** (fiebre persistente, temperatura alta)
-- ✅ **2 validaciones de falsos positivos**
-- ✅ **2 validaciones de sistema** (fuentes, disclaimers)
+**16 total test cases:**
+- ✅ **8 critical safety cases** (fever <3 months, red flags)
+- ✅ **4 edge cases** (persistent fever, high temperature)
+- ✅ **2 false positive validations**
+- ✅ **2 system validations** (sources, disclaimers)
 
-### Resultados Actuales
+### Current Results
 
 ```
 ✅ 13 PASSED (81%)
-❌ 2 FAILED (precisión del LLM, no seguridad)
+❌ 2 FAILED (LLM precision, not safety)
 ⏭️ 1 SKIPPED
 ```
 
-**Métricas de Seguridad:**
-- ✅ 100% detección de emergencias reales (<3 meses)
-- ✅ 0 falsos negativos críticos
-- ✅ 0 alucinaciones
-- ✅ 100% citas correctas de fuentes AAP/NHS
+**Safety Metrics:**
+- ✅ 100% real emergency detection (<3 months)
+- ✅ 0 critical false negatives
+- ✅ 0 hallucinations
+- ✅ 100% correct AAP/NHS source citations
 
-**Ver detalles:** [`TESTS_FINALES.md`](TESTS_FINALES.md)
+**See details:** [`TESTS_FINALES.md`](TESTS_FINALES.md)
 
 ---
 
-## 🔧 Configuración
+## 🔧 Configuration
 
-### Variables de Entorno
+### Environment Variables
 
-Crear archivo `pedisafe/.env`:
+Create file `pedisafe/.env`:
 
 ```env
-CEREBRAS_API_KEY=tu-api-key-aqui
+CEREBRAS_API_KEY=your-api-key-here
 ```
 
-O configurar variable de entorno del sistema:
+Or configure system environment variable:
 
 ```bash
 # Windows
-setx CEREBRAS_API_KEY "tu-api-key-aqui"
+setx CEREBRAS_API_KEY "your-api-key-here"
 
 # Linux/Mac
-export CEREBRAS_API_KEY="tu-api-key-aqui"
+export CEREBRAS_API_KEY="your-api-key-here"
 ```
 
-### Secretos de Streamlit
+### Streamlit Secrets
 
-Copiar y editar:
+Copy and edit:
 
 ```bash
 cp pedisafe/.streamlit/secrets.toml.example pedisafe/.streamlit/secrets.toml
 ```
 
-Editar `secrets.toml` con tu API key.
+Edit `secrets.toml` with your API key.
 
 ---
 
-## 📚 Documentación Completa
+## 📚 Complete Documentation
 
-| Documento | Descripción |
+| Document | Description |
 |-----------|-------------|
-| [`README.md`](README.md) | Este archivo - Overview general |
-| [`SETUP_TESTS.md`](SETUP_TESTS.md) | 📘 Instrucciones completas de testing |
-| [`TESTS_FINALES.md`](TESTS_FINALES.md) | 📊 Resultados y análisis de tests |
-| [`pedisafe/TEST_README.md`](pedisafe/TEST_README.md) | Documentación técnica de tests |
-| [`pedisafe/TEST_RESULTS.md`](pedisafe/TEST_RESULTS.md) | Análisis detallado de resultados |
-| [`DOCS/test_case_validation.md`](DOCS/test_case_validation.md) | Validación de casos de prueba |
+| [`README.md`](README.md) | This file - General overview |
+| [`SETUP_TESTS.md`](SETUP_TESTS.md) | 📘 Complete testing instructions |
+| [`TESTS_FINALES.md`](TESTS_FINALES.md) | 📊 Test results and analysis |
+| [`pedisafe/TEST_README.md`](pedisafe/TEST_README.md) | Technical test documentation |
+| [`pedisafe/TEST_RESULTS.md`](pedisafe/TEST_RESULTS.md) | Detailed results analysis |
+| [`DOCS/test_case_validation.md`](DOCS/test_case_validation.md) | Test case validation |
 
 ---
 
-## 🏗️ Tecnologías Utilizadas
+## 🏗️ Technologies Used
 
 ### Backend
 - **Python 3.12**
-- **LangChain** - Framework RAG
+- **LangChain** - RAG framework
 - **FAISS** - Vector database
 - **Sentence Transformers** - Embeddings
 - **Cerebras API** - LLM inference
 
 ### Frontend
-- **Streamlit** - Interfaz web
+- **Streamlit** - Web interface
 
 ### Testing
-- **pytest** - Framework de testing
-- **pytest-html** - Reportes HTML
+- **pytest** - Testing framework
+- **pytest-html** - HTML reports
 
-### Modelos
+### Models
 - **all-MiniLM-L6-v2** - Embeddings (sentence-transformers)
 - **llama-3.3-70b** - LLM (Cerebras)
 
 ---
 
-## 📊 Casos de Uso Validados
+## 📊 Validated Use Cases
 
-### ✅ Casos que el Sistema Maneja Correctamente
+### ✅ Cases the System Handles Correctly
 
-1. **Emergencias Reales (<3 meses con fiebre)**
-   - Input: "2 meses, 38.2°C"
-   - Output: 🔴 RED - Emergencia inmediata
+1. **Real Emergencies (<3 months with fever)**
+   - Input: "2 months, 38.2°C"
+   - Output: 🔴 RED - Immediate emergency
 
 2. **Red Flags**
-   - Dificultad respiratoria → 🔴 RED
-   - Convulsión → 🔴 RED
-   - Comportamiento alterado → 🔴 RED
-   - Erupción no blanqueable → 🔴 RED
+   - Difficulty breathing → 🔴 RED
+   - Seizure → 🔴 RED
+   - Altered behavior → 🔴 RED
+   - Non-blanching rash → 🔴 RED
 
-3. **Casos Moderados**
-   - Alta fiebre + deshidratación → 🟠 ORANGE
-   - Fiebre 6-12 meses sin alarmas → 🟡 YELLOW
+3. **Moderate Cases**
+   - High fever + dehydration → 🟠 ORANGE
+   - Fever 6-12 months without alarms → 🟡 YELLOW
 
-4. **Casos Leves**
-   - 5 años, 37.8°C → 🟢 GREEN (no es fiebre)
-   - Temperatura normal → 🟢 GREEN
+4. **Mild Cases**
+   - 5 years old, 37.8°C → 🟢 GREEN (not fever)
+   - Normal temperature → 🟢 GREEN
 
-### ⚠️ Limitaciones Conocidas
+### ⚠️ Known Limitations
 
-1. **Fiebre >72 horas:** Puede clasificar como YELLOW en lugar de ORANGE
-2. **Temperatura ≥40°C con buen comportamiento:** Puede subestimar urgencia
+1. **Fever >72 hours:** May classify as YELLOW instead of ORANGE
+2. **Temperature ≥40°C with good behavior:** May underestimate urgency
 
-**Nota:** Estas limitaciones NO afectan la seguridad crítica del sistema.
-
----
-
-## 🔐 Seguridad y Privacidad
-
-- ✅ No almacena datos personales
-- ✅ API key en variables de entorno
-- ✅ Disclaimers médicos claros
-- ✅ Citas de fuentes verificables
-- ✅ No inventación de síntomas (0 alucinaciones)
+**Note:** These limitations DO NOT affect the system's critical safety.
 
 ---
 
-## 🎓 Base de Conocimiento
+## 🔐 Security and Privacy
 
-**5 documentos oficiales:**
+- ✅ Does not store personal data
+- ✅ API key in environment variables
+- ✅ Clear medical disclaimers
+- ✅ Verifiable source citations
+- ✅ No symptom invention (0 hallucinations)
+
+---
+
+## 🎓 Knowledge Base
+
+**5 official documents:**
 
 ### American Academy of Pediatrics (AAP)
 1. Fever in Babies & Children (aap_fever_baby.md)
@@ -238,7 +238,7 @@ Editar `secrets.toml` con tu API key.
 ### NHS UK
 1. Fever in Children (nhs_fever_children.md)
 
-**Total:** ~13,000 palabras de contenido médico verificado de fuentes AAP y NHS
+**Total:** ~13,000 words of verified medical content from AAP and NHS sources
 
 ---
 
@@ -250,7 +250,7 @@ Editar `secrets.toml` con tu API key.
 streamlit run pedisafe/app.py
 ```
 
-### Docker (Futuro)
+### Docker (Future)
 
 ```bash
 docker build -t pedisafe .
@@ -259,27 +259,27 @@ docker run -p 8501:8501 pedisafe
 
 ---
 
-## 🧪 Ejecutar Tests
+## 🧪 Run Tests
 
-### Comando Básico
+### Basic Command
 
 ```bash
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v
 ```
 
-### Con Reporte HTML
+### With HTML Report
 
 ```bash
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v --html=pedisafe/report.html --self-contained-html
 ```
 
-### Solo Tests Críticos
+### Critical Tests Only
 
 ```bash
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v -m critical
 ```
 
-### Script Automático (Windows)
+### Automated Script (Windows)
 
 ```bash
 RUN_TESTS.bat
@@ -289,42 +289,42 @@ RUN_TESTS.bat
 
 ## 📈 Roadmap
 
-### Completado ✅
-- [x] Motor RAG con LangChain
-- [x] Interfaz Streamlit bilingüe (EN/ES)
-- [x] Base de conocimiento AAP/NHS (5 documentos)
-- [x] Suite de tests automatizados (16 casos)
-- [x] Detección determinística de red flags
-- [x] Sistema de niveles de color (4 niveles)
-- [x] Reportes HTML de testing
-- [x] Documentación completa
-- [x] 100% detección de emergencias (0 falsos negativos)
+### Completed ✅
+- [x] RAG engine with LangChain
+- [x] Bilingual Streamlit interface (EN/ES)
+- [x] AAP/NHS knowledge base (5 documents)
+- [x] Automated test suite (16 cases)
+- [x] Deterministic red flag detection
+- [x] Color-coded level system (4 levels)
+- [x] HTML testing reports
+- [x] Complete documentation
+- [x] 100% emergency detection (0 false negatives)
 
-### Futuro 🔮
-- [ ] Mejorar precisión en casos edge (fiebre persistente, 40°C)
-- [ ] Validación clínica con profesionales médicos
-- [ ] Expandir base de conocimiento (más condiciones)
-- [ ] Historial de consultas
-- [ ] App móvil nativa
-- [ ] Integración con telemedicina
-
----
-
-## 👥 Equipo
-
-Desarrollado para **Alameda Hacks 2026**
+### Future 🔮
+- [ ] Improve precision in edge cases (persistent fever, 40°C)
+- [ ] Clinical validation with medical professionals
+- [ ] Expand knowledge base (more conditions)
+- [ ] Consultation history
+- [ ] Native mobile app
+- [ ] Telemedicine integration
 
 ---
 
-## 📄 Licencia
+## 👥 Team
 
-[Especificar licencia]
+Developed for **Alameda Hacks 2026**
 
 ---
 
-## 🆘 Soporte y Troubleshooting
+## 📄 License
 
-### Problemas Comunes
+[Specify license]
+
+---
+
+## 🆘 Support and Troubleshooting
+
+### Common Issues
 
 **Error: "ModuleNotFoundError: No module named 'langchain_text_splitters'"**
 
@@ -334,35 +334,35 @@ pip install langchain-text-splitters langchain-core
 
 **Error: "Could not initialize RAG engine"**
 
-1. Verificar API key configurado
-2. Verificar archivos en `knowledge/` (deben ser 8 archivos .md)
-3. Verificar conexión a Internet
+1. Verify API key is configured
+2. Verify files in `knowledge/` (must be 5 .md files)
+3. Verify Internet connection
 
-**Tests muy lentos**
+**Tests very slow**
 
-Primera ejecución descarga modelos (~110MB). Ejecuciones siguientes son más rápidas.
+First run downloads models (~110MB). Subsequent runs are faster.
 
-**Para más ayuda, ver:** [`SETUP_TESTS.md`](SETUP_TESTS.md)
-
----
-
-## 📞 Contacto
-
-[Agregar información de contacto]
+**For more help, see:** [`SETUP_TESTS.md`](SETUP_TESTS.md)
 
 ---
 
-## 🙏 Agradecimientos
+## 📞 Contact
 
-- **American Academy of Pediatrics** - Guías clínicas
-- **NHS UK** - Documentación médica
-- **Cerebras** - API de inferencia LLM
-- **LangChain** - Framework RAG
-- **HuggingFace** - Modelos de embeddings
+[Add contact information]
 
 ---
 
-**Última actualización:** 2026-01-11  
-**Versión:** 1.0.0  
-**Estado:** ✅ Prototipo funcional - 81% tests passing (100% en casos críticos)  
-**⚠️ Nota:** Este es un prototipo de hackathon, NO un producto médico validado
+## 🙏 Acknowledgments
+
+- **American Academy of Pediatrics** - Clinical guidelines
+- **NHS UK** - Medical documentation
+- **Cerebras** - LLM inference API
+- **LangChain** - RAG framework
+- **HuggingFace** - Embedding models
+
+---
+
+**Last updated:** 2026-01-11  
+**Version:** 1.0.0  
+**Status:** ✅ Functional prototype - 81% tests passing (100% on critical cases)  
+**⚠️ Note:** This is a hackathon prototype, NOT a validated medical product

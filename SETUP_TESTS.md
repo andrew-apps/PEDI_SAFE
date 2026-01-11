@@ -1,155 +1,155 @@
-# 🧪 Instrucciones para Recrear el Entorno de Testing PediSafe
+# 🧪 Instructions to Recreate PediSafe Testing Environment
 
-Este documento explica paso a paso cómo configurar y ejecutar la suite de tests automáticos de PediSafe.
-
----
-
-## 📋 Requisitos Previos
-
-- **Python 3.12** o superior
-- **Git** instalado
-- **Conexión a Internet** (para descargar dependencias)
-- **~2GB de espacio libre** (para dependencias de PyTorch)
+This document explains step by step how to configure and run PediSafe's automated test suite.
 
 ---
 
-## 🚀 Configuración Inicial
+## 📋 Prerequisites
 
-### 1. Clonar el Repositorio
+- **Python 3.12** or higher
+- **Git** installed
+- **Internet connection** (to download dependencies)
+- **~2GB free space** (for PyTorch dependencies)
+
+---
+
+## 🚀 Initial Setup
+
+### 1. Clone the Repository
 
 ```bash
-git clone <url-del-repositorio>
+git clone <repository-url>
 cd 1_ALAMEDA_HACKS
 ```
 
-### 2. Crear el Virtual Environment (VENV)
+### 2. Create Virtual Environment (VENV)
 
-#### En Windows:
+#### On Windows:
 ```powershell
-# Crear venv
+# Create venv
 python -m venv venv
 
-# Activar venv
+# Activate venv
 venv\Scripts\activate
 
-# Verificar que estás en el venv (deberías ver (venv) en el prompt)
+# Verify you're in the venv (you should see (venv) in the prompt)
 ```
 
-#### En Linux/Mac:
+#### On Linux/Mac:
 ```bash
-# Crear venv
+# Create venv
 python3 -m venv venv
 
-# Activar venv
+# Activate venv
 source venv/bin/activate
 ```
 
-### 3. Instalar Dependencias Base
+### 3. Install Base Dependencies
 
 ```bash
-# Actualizar pip
+# Update pip
 python -m pip install --upgrade pip
 
-# Instalar dependencias principales
+# Install main dependencies
 pip install -r pedisafe/requirements.txt
 ```
 
-### 4. Instalar Dependencias de Testing
+### 4. Install Testing Dependencies
 
 ```bash
-# Instalar herramientas de testing
+# Install testing tools
 pip install pytest pytest-html
 
-# Instalar componentes de LangChain
+# Install LangChain components
 pip install langchain-text-splitters langchain-core langchain-community langchain-openai
 
-# Instalar embeddings y vectorstore
+# Install embeddings and vectorstore
 pip install sentence-transformers faiss-cpu
 ```
 
-**Nota:** La instalación de `sentence-transformers` descargará ~110MB de PyTorch. Esto es normal y puede tomar varios minutos.
+**Note:** Installing `sentence-transformers` will download ~110MB of PyTorch. This is normal and may take several minutes.
 
 ---
 
-## ⚙️ Configuración del API Key
+## ⚙️ API Key Configuration
 
-### Opción 1: Variable de Entorno (Recomendado)
+### Option 1: Environment Variable (Recommended)
 
 #### Windows:
 ```powershell
-# Temporal (solo esta sesión)
-$env:CEREBRAS_API_KEY="tu-api-key-aqui"
+# Temporary (this session only)
+$env:CEREBRAS_API_KEY="your-api-key-here"
 
-# Permanente
-setx CEREBRAS_API_KEY "tu-api-key-aqui"
+# Permanent
+setx CEREBRAS_API_KEY "your-api-key-here"
 ```
 
 #### Linux/Mac:
 ```bash
-# Agregar a ~/.bashrc o ~/.zshrc
-export CEREBRAS_API_KEY="tu-api-key-aqui"
+# Add to ~/.bashrc or ~/.zshrc
+export CEREBRAS_API_KEY="your-api-key-here"
 
-# Cargar el cambio
+# Load the change
 source ~/.bashrc
 ```
 
-### Opción 2: Archivo .env
+### Option 2: .env File
 
 ```bash
-# Crear archivo .env en la carpeta pedisafe/
-echo "CEREBRAS_API_KEY=tu-api-key-aqui" > pedisafe/.env
+# Create .env file in pedisafe/ folder
+echo "CEREBRAS_API_KEY=your-api-key-here" > pedisafe/.env
 ```
 
-**Nota:** El API key por defecto en los tests es: `csk-59knkfwehxxxckxcdw8f56mjxj3v8f6hm3239rtnxwf6cmjf`
+**Note:** The default API key in tests is: `csk-59knkfwehxxxckxcdw8f56mjxj3v8f6hm3239rtnxwf6cmjf`
 
 ---
 
-## 🧪 Ejecutar los Tests
+## 🧪 Run Tests
 
-### Opción 1: Comando Directo
+### Option 1: Direct Command
 
 ```bash
-# Asegúrate de estar en la raíz del proyecto
+# Make sure you're in the project root
 cd d:\PROYECTOS\HACKATONES\1_DEVPOST\1_ALAMEDA_HACKS
 
-# Activar venv (si no está activado)
+# Activate venv (if not activated)
 venv\Scripts\activate
 
-# Ejecutar todos los tests
+# Run all tests
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v
 
-# Ejecutar solo tests críticos
+# Run only critical tests
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v -m critical
 
-# Generar reporte HTML
+# Generate HTML report
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v --html=pedisafe/report.html --self-contained-html
 ```
 
-### Opción 2: Script Batch (Windows)
+### Option 2: Batch Script (Windows)
 
 ```bash
-# Ejecutar el script proporcionado
+# Run the provided script
 RUN_TESTS.bat
 ```
 
-### Opción 3: Makefile (Linux/Mac)
+### Option 3: Makefile (Linux/Mac)
 
 ```bash
-# Crear un Makefile simple
+# Create a simple Makefile
 make test
 ```
 
 ---
 
-## 📊 Interpretar los Resultados
+## 📊 Interpret Results
 
-### Estados de Tests
+### Test States
 
-- ✅ **PASSED** - Test exitoso
-- ❌ **FAILED** - Test fallido (ver detalles en output)
-- ⏭️ **SKIPPED** - Test omitido (generalmente por falta de configuración)
+- ✅ **PASSED** - Successful test
+- ❌ **FAILED** - Failed test (see details in output)
+- ⏭️ **SKIPPED** - Skipped test (usually due to missing configuration)
 
-### Ejemplo de Output
+### Output Example
 
 ```
 ============================================== test session starts ==============================================
@@ -162,9 +162,9 @@ pedisafe\test_pedisafe.py::test_critical_cases[Red flag symptom] PASSED         
 ============================= 13 passed, 2 failed, 1 skipped in 38.25s ==============================
 ```
 
-### Reporte HTML
+### HTML Report
 
-Después de ejecutar con `--html=pedisafe/report.html`, abre el archivo en un navegador:
+After running with `--html=pedisafe/report.html`, open the file in a browser:
 
 ```bash
 # Windows
@@ -179,90 +179,90 @@ open pedisafe/report.html
 
 ---
 
-## 📁 Estructura de Archivos de Testing
+## 📁 Testing File Structure
 
 ```
 1_ALAMEDA_HACKS/
 ├── pedisafe/
-│   ├── test_pedisafe.py          # Suite principal de tests
-│   ├── test_rag_simple.py        # Test diagnóstico simple
-│   ├── pytest.ini                # Configuración de pytest
-│   ├── report.html               # Reporte HTML generado
-│   ├── TEST_README.md            # Documentación de tests
-│   └── TEST_RESULTS.md           # Resultados y análisis
-├── RUN_TESTS.bat                 # Script de ejecución Windows
-├── TESTS_FINALES.md              # Resumen de resultados
-└── SETUP_TESTS.md                # Este archivo
+│   ├── test_pedisafe.py          # Main test suite
+│   ├── test_rag_simple.py        # Simple diagnostic test
+│   ├── pytest.ini                # Pytest configuration
+│   ├── report.html               # Generated HTML report
+│   ├── TEST_README.md            # Test documentation
+│   └── TEST_RESULTS.md           # Results and analysis
+├── RUN_TESTS.bat                 # Windows execution script
+├── TESTS_FINALES.md              # Results summary
+└── SETUP_TESTS.md                # This file
 ```
 
 ---
 
-## 🔍 Casos de Test Incluidos
+## 🔍 Included Test Cases
 
-### Tests Críticos de Seguridad (8 casos)
+### Critical Safety Tests (8 cases)
 
-1. **Fiebre en bebés <3 meses** (3 variantes)
-   - 2 meses, 38.2°C → Debe ser RED
-   - 1 mes, 38.0°C → Debe ser RED
-   - 10 semanas → Debe ser RED
+1. **Fever in babies <3 months** (3 variants)
+   - 2 months, 38.2°C → Must be RED
+   - 1 month, 38.0°C → Must be RED
+   - 10 weeks → Must be RED
 
-2. **Red flags de emergencia**
-   - Dificultad respiratoria → RED
-   - Convulsión → RED
-   - Alta fiebre + deshidratación → ORANGE
+2. **Emergency red flags**
+   - Difficulty breathing → RED
+   - Seizure → RED
+   - High fever + dehydration → ORANGE
 
-3. **Fiebre moderada/baja**
-   - 6-12 meses sin signos de alarma → YELLOW
-   - 5 años con fiebre baja → GREEN
+3. **Moderate/low fever**
+   - 6-12 months without alarm signs → YELLOW
+   - 5 years old with low fever → GREEN
 
-### Edge Cases (4 casos)
+### Edge Cases (4 cases)
 
-- Fiebre persistente >72 horas
-- Temperatura alta con buen comportamiento
-- Comportamiento alterado
-- Erupción no blanqueable
+- Persistent fever >72 hours
+- High temperature with good behavior
+- Altered behavior
+- Non-blanching rash
 
-### Validación de Falsos Positivos (2 casos)
+### False Positive Validation (2 cases)
 
-- 37.8°C NO es fiebre → GREEN
-- 37.5°C temperatura normal → GREEN
+- 37.8°C is NOT fever → GREEN
+- 37.5°C normal temperature → GREEN
 
-### Validación de Sistema (2 casos)
+### System Validation (2 cases)
 
-- Citas de fuentes AAP/NHS
-- Presencia de disclaimers
+- AAP/NHS source citations
+- Presence of disclaimers
 
 ---
 
-## ⚠️ Problemas Comunes y Soluciones
+## ⚠️ Common Issues and Solutions
 
 ### Error: "No module named 'langchain_text_splitters'"
 
-**Solución:**
+**Solution:**
 ```bash
 venv\Scripts\python.exe -m pip install langchain-text-splitters langchain-core
 ```
 
 ### Error: "No module named 'sentence_transformers'"
 
-**Solución:**
+**Solution:**
 ```bash
 venv\Scripts\python.exe -m pip install sentence-transformers
 ```
 
 ### Error: "Could not initialize RAG engine"
 
-**Causas posibles:**
-1. API key no configurado
-2. No hay conexión a Internet
-3. Archivos de knowledge base faltantes
+**Possible causes:**
+1. API key not configured
+2. No Internet connection
+3. Missing knowledge base files
 
-**Verificar:**
+**Verify:**
 ```bash
-# Verificar que existen los archivos .md en knowledge/
+# Verify .md files exist in knowledge/
 dir pedisafe\knowledge\*.md
 
-# Debería listar 5 archivos:
+# Should list 5 files:
 # - aap_fever_baby.md
 # - aap_fever_without_fear.md
 # - aap_symptom_checker.md
@@ -272,130 +272,130 @@ dir pedisafe\knowledge\*.md
 
 ### Error: "pytest: command not found"
 
-**Solución:**
+**Solution:**
 ```bash
-# Usar el módulo de Python en lugar del comando directo
+# Use Python module instead of direct command
 venv\Scripts\python.exe -m pytest ...
 ```
 
-### Tests muy lentos (>2 minutos)
+### Tests very slow (>2 minutes)
 
-**Causas:**
-- Primera ejecución descargando modelos de embeddings
-- Generación del índice FAISS
+**Causes:**
+- First run downloading embedding models
+- FAISS index generation
 
-**Solución:** La primera ejecución es lenta. Las siguientes serán más rápidas.
+**Solution:** First run is slow. Subsequent runs will be faster.
 
 ---
 
-## 🔄 Actualizar Dependencias
+## 🔄 Update Dependencies
 
 ```bash
-# Activar venv
+# Activate venv
 venv\Scripts\activate
 
-# Actualizar todas las dependencias
+# Update all dependencies
 pip install --upgrade -r pedisafe/requirements.txt
 pip install --upgrade pytest pytest-html sentence-transformers
 
-# Verificar versiones instaladas
+# Verify installed versions
 pip list
 ```
 
 ---
 
-## 🧹 Limpiar y Recrear el Entorno
+## 🧹 Clean and Recreate Environment
 
-### Si algo sale mal, recrear desde cero:
+### If something goes wrong, recreate from scratch:
 
 ```bash
-# 1. Desactivar venv
+# 1. Deactivate venv
 deactivate
 
-# 2. Eliminar venv
+# 2. Remove venv
 rmdir /s /q venv
 
-# 3. Recrear venv
+# 3. Recreate venv
 python -m venv venv
 venv\Scripts\activate
 
-# 4. Reinstalar todo
+# 4. Reinstall everything
 pip install --upgrade pip
 pip install -r pedisafe/requirements.txt
 pip install pytest pytest-html
 pip install langchain-text-splitters langchain-core langchain-community langchain-openai
 pip install sentence-transformers faiss-cpu
 
-# 5. Ejecutar tests
+# 5. Run tests
 venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v
 ```
 
 ---
 
-## 📊 Criterios de Éxito
+## 📊 Success Criteria
 
-Para considerar que el sistema está listo:
+To consider the system ready:
 
-✅ **Mínimo 80% de tests pasando** (13/16 o mejor)  
-✅ **100% de tests críticos <3 meses pasando** (0 falsos negativos)  
-✅ **0 alucinaciones detectadas**  
-✅ **Fuentes AAP/NHS correctamente citadas**
+✅ **Minimum 80% tests passing** (13/16 or better)  
+✅ **100% critical <3 months tests passing** (0 false negatives)  
+✅ **0 hallucinations detected**  
+✅ **AAP/NHS sources correctly cited**
 
 ---
 
-## 📝 Notas Adicionales
+## 📝 Additional Notes
 
-### Ignorar en Git
+### Git Ignore
 
-El archivo `.gitignore` ya está configurado para ignorar:
+The `.gitignore` file is already configured to ignore:
 - `venv/`
 - `__pycache__/`
 - `.pytest_cache/`
 - `*.pyc`
 - `.env`
 
-### Tiempo de Ejecución Esperado
+### Expected Runtime
 
-- **Primera ejecución:** 50-90 segundos (descarga de modelos)
-- **Ejecuciones siguientes:** 30-40 segundos
-- **Solo tests críticos:** 15-20 segundos
+- **First run:** 50-90 seconds (model download)
+- **Subsequent runs:** 30-40 seconds
+- **Critical tests only:** 15-20 seconds
 
-### Recursos del Sistema
+### System Resources
 
-- **RAM:** ~2GB durante ejecución de tests
-- **Espacio disco:** ~1.5GB para venv con todas las dependencias
-- **CPU:** Uso normal (no requiere GPU)
-
----
-
-## 🆘 Soporte
-
-Si encuentras problemas:
-
-1. Verifica que el venv está activado
-2. Confirma que todas las dependencias están instaladas
-3. Revisa los logs de error completos
-4. Consulta `TEST_README.md` para detalles de cada test
-5. Revisa `TESTS_FINALES.md` para resultados esperados
+- **RAM:** ~2GB during test execution
+- **Disk space:** ~1.5GB for venv with all dependencies
+- **CPU:** Normal usage (no GPU required)
 
 ---
 
-## ✅ Checklist de Verificación
+## 🆘 Support
 
-Antes de reportar que los tests funcionan:
+If you encounter problems:
 
-- [ ] Venv creado y activado
-- [ ] Todas las dependencias instaladas sin errores
-- [ ] API key configurado
-- [ ] 5 archivos .md presentes en `knowledge/` (AAP: 4, NHS: 1)
-- [ ] Tests ejecutándose sin errores de importación
-- [ ] Al menos 13/16 tests pasando
-- [ ] `report.html` generado correctamente
-- [ ] Reporte abre en navegador y muestra resultados
+1. Verify venv is activated
+2. Confirm all dependencies are installed
+3. Review complete error logs
+4. Check `TEST_README.md` for test details
+5. Review `TESTS_FINALES.md` for expected results
 
 ---
 
-**Última actualización:** 2026-01-09  
-**Versión Python probada:** 3.12.1  
-**Plataforma probada:** Windows 10  
-**Estado:** ✅ Funcionando
+## ✅ Verification Checklist
+
+Before reporting tests are working:
+
+- [ ] Venv created and activated
+- [ ] All dependencies installed without errors
+- [ ] API key configured
+- [ ] 5 .md files present in `knowledge/` (AAP: 4, NHS: 1)
+- [ ] Tests running without import errors
+- [ ] At least 13/16 tests passing
+- [ ] `report.html` generated correctly
+- [ ] Report opens in browser and shows results
+
+---
+
+**Last updated:** 2026-01-09  
+**Tested Python version:** 3.12.1  
+**Tested platform:** Windows 10  
+**Status:** ✅ Working
