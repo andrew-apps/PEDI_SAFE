@@ -1,59 +1,59 @@
 # 🐳 Docker Deployment Guide
 
-## Quick Start con Docker
+## Quick Start with Docker
 
-### Paso 1: Crear archivo .env
+### Step 1: Create .env file
 
 ```bash
-# En la carpeta pedisafe/
-echo "CEREBRAS_API_KEY=csk-tu-key-aqui" > .env
+# In pedisafe/ folder
+echo "CEREBRAS_API_KEY=csk-your-key-here" > .env
 ```
 
-### Paso 2: Build y Run
+### Step 2: Build and Run
 
 ```bash
-# Opción 1: Docker Compose (Recomendado)
+# Option 1: Docker Compose (Recommended)
 docker-compose up --build
 
-# Opción 2: Docker directo
+# Option 2: Direct Docker
 docker build -t pedisafe .
 docker run -p 8501:8501 --env-file .env pedisafe
 ```
 
-### Paso 3: Acceder
+### Step 3: Access
 
-Abre tu navegador en: **http://localhost:8501**
+Open your browser at: **http://localhost:8501**
 
 ---
 
-## Comandos Útiles
+## Useful Commands
 
 ```bash
-# Ver logs
+# View logs
 docker-compose logs -f
 
-# Detener
+# Stop
 docker-compose down
 
-# Rebuild después de cambios
+# Rebuild after changes
 docker-compose up --build
 
-# Limpiar todo
+# Clean everything
 docker-compose down -v
 docker system prune -a
 ```
 
 ---
 
-## Deployment en Producción
+## Production Deployment
 
 ### Railway
 
 ```bash
-# Instalar Railway CLI
+# Install Railway CLI
 npm install -g @railway/cli
 
-# Login y deploy
+# Login and deploy
 railway login
 railway init
 railway up
@@ -61,10 +61,10 @@ railway up
 
 ### Render
 
-1. Conectar GitHub repo
-2. Seleccionar "Docker"
-3. Agregar variable: `CEREBRAS_API_KEY`
-4. Deploy automático
+1. Connect GitHub repo
+2. Select "Docker"
+3. Add variable: `CEREBRAS_API_KEY`
+4. Automatic deploy
 
 ---
 
@@ -72,20 +72,20 @@ railway up
 
 **Error: "Port already in use"**
 ```bash
-# Cambiar puerto en docker-compose.yml
+# Change port in docker-compose.yml
 ports:
-  - "8502:8501"  # Usa 8502 en lugar de 8501
+  - "8502:8501"  # Use 8502 instead of 8501
 ```
 
 **Error: "API Key not found"**
 ```bash
-# Verificar .env
+# Verify .env
 cat .env
 
-# Rebuild con variables
+# Rebuild with variables
 docker-compose up --build
 ```
 
-**Embeddings muy lentos en primera carga**
-- Normal: descarga modelo de Hugging Face (~80MB)
-- Siguientes cargas son instantáneas (cached)
+**Embeddings very slow on first load**
+- Normal: downloads Hugging Face model (~80MB)
+- Subsequent loads are instant (cached)

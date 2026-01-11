@@ -1,95 +1,95 @@
-# 📋 Instrucciones para Completar el Proyecto PediSafe
+# 📋 Instructions to Complete PediSafe Project
 
-## ✅ LO QUE YA ESTÁ HECHO
+## ✅ WHAT'S ALREADY DONE
 
-| Componente | Estado | Archivo |
+| Component | Status | File |
 |------------|--------|---------|
-| Base de conocimientos RAG | ✅ Completo | `knowledge/*.md` |
-| Motor RAG con FAISS | ✅ Completo | `rag_engine.py` |
-| Aplicación Streamlit | ✅ Completo | `app.py` |
-| Configuración y prompts | ✅ Completo | `config.py` |
-| UI con BYOK | ✅ Completo | Integrado en `app.py` |
-| README para Devpost | ✅ Completo | `README.md` |
-| Dependencias | ✅ Completo | `requirements.txt` |
+| RAG knowledge base | ✅ Complete | `knowledge/*.md` |
+| RAG engine with FAISS | ✅ Complete | `rag_engine.py` |
+| Streamlit application | ✅ Complete | `app.py` |
+| Configuration and prompts | ✅ Complete | `config.py` |
+| UI with BYOK | ✅ Complete | Integrated in `app.py` |
+| README for Devpost | ✅ Complete | `README.md` |
+| Dependencies | ✅ Complete | `requirements.txt` |
 
 ---
 
-## 🚀 PASOS PARA EJECUTAR LOCALMENTE
+## 🚀 STEPS TO RUN LOCALLY
 
-### Paso 1: Crear entorno virtual
+### Step 1: Create virtual environment
 ```powershell
 cd d:\PROYECTOS\HACKATONES\1_DEVPOST\1_ALAMEDA_HACKS\pedisafe
 python -m venv venv
 .\venv\Scripts\activate
 ```
 
-### Paso 2: Instalar dependencias
+### Step 2: Install dependencies
 ```powershell
 pip install -r requirements.txt
 ```
 
-### Paso 3: Configurar API Key
-**Opción A - Variable de entorno:**
+### Step 3: Configure API Key
+**Option A - Environment variable:**
 ```powershell
-$env:OPENAI_API_KEY="sk-tu-api-key-aqui"
+$env:OPENAI_API_KEY="sk-your-api-key-here"
 ```
 
-**Opción B - Archivo .env:**
+**Option B - .env file:**
 ```powershell
 copy .env.example .env
-# Edita .env y agrega tu key
+# Edit .env and add your key
 ```
 
-**Opción C - Streamlit Secrets (para deploy):**
+**Option C - Streamlit Secrets (for deployment):**
 ```powershell
 copy .streamlit\secrets.toml.example .streamlit\secrets.toml
-# Edita secrets.toml y agrega tu key
+# Edit secrets.toml and add your key
 ```
 
-### Paso 4: Ejecutar la aplicación
+### Step 4: Run the application
 ```powershell
 streamlit run app.py
 ```
 
-La app se abrirá en: `http://localhost:8501`
+The app will open at: `http://localhost:8501`
 
 ---
 
-## 📹 PASOS PARA EL VIDEO DEMO (2-5 minutos)
+## 📹 STEPS FOR DEMO VIDEO (2-5 minutes)
 
-### Estructura sugerida:
+### Suggested structure:
 
-1. **Intro (30 seg)**
-   - "Hola, soy [nombre] presentando PediSafe"
-   - Problema: Padres ansiosos saturan urgencias
-   - Solución: Triaje informativo con IA
+1. **Intro (30 sec)**
+   - "Hi, I'm [name] presenting PediSafe"
+   - Problem: Anxious parents overwhelm ERs
+   - Solution: AI-powered informational triage
 
-2. **Demo en vivo (2-3 min)**
-   - Mostrar la interfaz
-   - Ejemplo 1: Bebé 2 meses con 38.5°C → ROJO
-   - Ejemplo 2: Niño 8 meses con 38°C → AMARILLO
-   - Mostrar cómo cita fuentes (AAP, NHS)
+2. **Live demo (2-3 min)**
+   - Show the interface
+   - Example 1: 2-month baby with 38.5°C → RED
+   - Example 2: 8-month child with 38°C → YELLOW
+   - Show how it cites sources (AAP, NHS)
 
-3. **Arquitectura técnica (30 seg)**
-   - RAG con LangChain + FAISS
-   - Capa de seguridad determinista
-   - GPT-4o-mini para bajo costo
+3. **Technical architecture (30 sec)**
+   - RAG with LangChain + FAISS
+   - Deterministic safety layer
+   - GPT-4o-mini for low cost
 
-4. **Cierre (30 seg)**
-   - Impacto: Reduce visitas innecesarias a urgencias
+4. **Closing (30 sec)**
+   - Impact: Reduces unnecessary ER visits
    - Track: Social Good + ML/AI
-   - Gracias
+   - Thanks
 
-### Herramientas para grabar:
-- **OBS Studio** (gratis)
-- **Loom** (gratis hasta 5 min)
+### Recording tools:
+- **OBS Studio** (free)
+- **Loom** (free up to 5 min)
 - **Windows + G** (Xbox Game Bar)
 
 ---
 
-## 🌐 DESPLIEGUE EN STREAMLIT CLOUD (GRATIS)
+## 🌐 DEPLOYMENT ON STREAMLIT CLOUD (FREE)
 
-### Paso 1: Subir a GitHub
+### Step 1: Upload to GitHub
 ```powershell
 cd d:\PROYECTOS\HACKATONES\1_DEVPOST\1_ALAMEDA_HACKS\pedisafe
 git init
@@ -100,26 +100,26 @@ git remote add origin https://github.com/TU_USUARIO/pedisafe.git
 git push -u origin main
 ```
 
-### Paso 2: Desplegar en Streamlit Cloud
-1. Ve a [share.streamlit.io](https://share.streamlit.io)
-2. Conecta tu cuenta de GitHub
-3. Selecciona el repo `pedisafe`
+### Step 2: Deploy on Streamlit Cloud
+1. Go to [share.streamlit.io](https://share.streamlit.io)
+2. Connect your GitHub account
+3. Select the `pedisafe` repo
 4. Main file: `app.py`
-5. En "Advanced settings" > Secrets, agrega:
+5. In "Advanced settings" > Secrets, add:
    ```
-   OPENAI_API_KEY = "sk-tu-key"
+   OPENAI_API_KEY = "sk-your-key"
    ```
 6. Click "Deploy"
 
-**URL resultante:** `https://pedisafe.streamlit.app`
+**Resulting URL:** `https://pedisafe.streamlit.app`
 
 ---
 
-## 📝 SUBMISSION EN DEVPOST
+## 📝 DEVPOST SUBMISSION
 
-### Información requerida:
+### Required information:
 
-**Título:** PediSafe - AI Pediatric Fever Triage Assistant
+**Title:** PediSafe - AI Pediatric Fever Triage Assistant
 
 **Tagline:** Empowering parents with knowledge, one consultation at a time
 
@@ -127,7 +127,7 @@ git push -u origin main
 - ✅ Social Good (Primary)
 - ✅ Machine Learning / AI
 
-**Descripción corta:**
+**Short description:**
 ```
 PediSafe is an AI-powered triage assistant that helps parents make informed 
 decisions about pediatric fever using RAG with validated clinical guidelines 
@@ -150,43 +150,43 @@ and cited sources to reduce unnecessary ER visits.
 
 ---
 
-## 💰 COSTOS ESTIMADOS
+## 💰 ESTIMATED COSTS
 
-| Uso | Costo aprox |
+| Usage | Approx cost |
 |-----|-------------|
-| 10 conversaciones de prueba | ~$0.05 |
-| Demo completa | ~$0.02 |
-| Jueces probando | ~$0.10 |
-| **Total estimado** | **< $0.50** |
+| 10 test conversations | ~$0.05 |
+| Complete demo | ~$0.02 |
+| Judges testing | ~$0.10 |
+| **Estimated total** | **< $0.50** |
 
-Para obtener créditos gratis:
-- OpenAI da $5 gratis a cuentas nuevas
-- O usa la función BYOK (los jueces pueden usar su propia key)
+To get free credits:
+- OpenAI gives $5 free to new accounts
+- Or use BYOK function (judges can use their own key)
 
 ---
 
-## 🎯 CRITERIOS DEL HACKATON CUBIERTOS
+## 🎯 HACKATHON CRITERIA COVERED
 
-| Criterio | Cómo lo cumplimos |
+| Criterion | How we meet it |
 |----------|-------------------|
-| **Impacto** | Reduce visitas innecesarias a urgencias |
-| **UI/UX** | Interfaz limpia con Streamlit, niveles de color |
-| **Documentación** | README completo, código comentado |
-| **Relevancia** | Social Good + ML/AI tracks |
-| **Funcionalidad** | App funcional end-to-end |
-| **Código nuevo** | 100% creado durante el hackathon |
-| **Demo** | Video de 2-5 min requerido |
+| **Impact** | Reduces unnecessary ER visits |
+| **UI/UX** | Clean Streamlit interface, color levels |
+| **Documentation** | Complete README, commented code |
+| **Relevance** | Social Good + ML/AI tracks |
+| **Functionality** | End-to-end functional app |
+| **New code** | 100% created during hackathon |
+| **Demo** | 2-5 min video required |
 
 ---
 
-## ⚠️ NOTAS IMPORTANTES
+## ⚠️ IMPORTANT NOTES
 
-1. **NUNCA** subas tu API key a GitHub
-2. Los jueces verán tu código - mantén buena calidad
-3. El video es CRUCIAL - prepáralo bien
-4. Prueba la app antes de enviar
-5. Fecha límite: **11 de enero 2026, 12:00 PM GMT-5**
+1. **NEVER** upload your API key to GitHub
+2. Judges will see your code - maintain good quality
+3. The video is CRUCIAL - prepare it well
+4. Test the app before submitting
+5. Deadline: **January 11, 2026, 12:00 PM GMT-5**
 
 ---
 
-¡Buena suerte en el hackathon! 🚀
+Good luck in the hackathon! 🚀
