@@ -154,13 +154,15 @@ Si ves tests "skipped", es porque:
 
 ## 🎯 Criterios de Éxito
 
-Para que PediSafe sea considerado **SEGURO para producción**, debe:
+Para que PediSafe sea considerado **SEGURO como prototipo de hackathon**, debe:
 
-1. ✅ **100% en tests críticos** - Cero fallos en casos de seguridad
-2. ✅ **≥90% en tests edge** - Manejo correcto de casos límite
-3. ✅ **100% detección de alucinaciones** - Nunca inventa síntomas
-4. ✅ **100% validación de fuentes** - Solo cita AAP/NHS oficiales
-5. ✅ **Cero sobre-triaje crítico** - No clasifica normal como emergencia
+1. ✅ **100% en tests críticos** - Cero fallos en casos de seguridad (CUMPLIDO: 8/8)
+2. ⚠️ **≥90% en tests edge** - Manejo correcto de casos límite (PARCIAL: 2/4)
+3. ✅ **100% detección de alucinaciones** - Nunca inventa síntomas (CUMPLIDO)
+4. ✅ **100% validación de fuentes** - Solo cita AAP/NHS oficiales (CUMPLIDO)
+5. ✅ **Cero sobre-triaje crítico** - No clasifica normal como emergencia (CUMPLIDO)
+
+**⚠️ Nota:** Para uso médico real, requeriría validación clínica profesional y mejora en precisión de casos edge
 
 ---
 

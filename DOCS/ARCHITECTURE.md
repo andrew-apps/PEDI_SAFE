@@ -767,7 +767,7 @@ streamlit run app.py
 
 ### Development Setup
 ```bash
-git clone https://github.com/yourusername/pedisafe.git
+git clone https://github.com/andrew7u7/pedisafe.git
 cd pedisafe
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows

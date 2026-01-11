@@ -146,7 +146,7 @@ pedisafe/
 ├── config.py                 # ✅ Actualizado - Funciones dinámicas
 ├── i18n.py                   # ✨ NUEVO - Sistema de internacionalización
 ├── requirements.txt          # Sin cambios
-├── knowledge/                # Sin cambios (8 archivos .md)
+├── knowledge/                # Sin cambios (5 archivos .md: 4 AAP + 1 NHS)
 ├── .streamlit/
 │   ├── config.toml
 │   └── secrets.toml.example

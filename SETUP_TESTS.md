@@ -262,15 +262,12 @@ venv\Scripts\python.exe -m pip install sentence-transformers
 # Verificar que existen los archivos .md en knowledge/
 dir pedisafe\knowledge\*.md
 
-# Debería listar 8 archivos:
+# Debería listar 5 archivos:
 # - aap_fever_baby.md
 # - aap_fever_without_fear.md
 # - aap_symptom_checker.md
-# - nhs_baby_fever.md
+# - aap_when_to_call.md
 # - nhs_fever_children.md
-# - nhs_high_temperature.md
-# - nhs_symptom_checker.md
-# - nhs_when_to_worry.md
 ```
 
 ### Error: "pytest: command not found"
@@ -390,7 +387,7 @@ Antes de reportar que los tests funcionan:
 - [ ] Venv creado y activado
 - [ ] Todas las dependencias instaladas sin errores
 - [ ] API key configurado
-- [ ] 8 archivos .md presentes en `knowledge/`
+- [ ] 5 archivos .md presentes en `knowledge/` (AAP: 4, NHS: 1)
 - [ ] Tests ejecutándose sin errores de importación
 - [ ] Al menos 13/16 tests pasando
 - [ ] `report.html` generado correctamente

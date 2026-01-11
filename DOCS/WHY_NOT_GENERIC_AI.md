@@ -56,11 +56,11 @@ User Input → Layer A (Deterministic Rules) → Layer B (RAG + LLM) → Respons
 - Might say: "Go to the ER immediately"
 - **Consistency:** ❌ Unpredictable
 
-**PediSafe Response (Guaranteed):**
+**PediSafe Response (Deterministic Layer A):**
 - Layer A detects "trouble breathing" → RED FLAG
 - Automatically escalates to 🔴 RED triage
 - Response: "🔴 EMERGENCY - Call 911 or go to ER immediately"
-- **Consistency:** ✅ Always correct
+- **Consistency:** ✅ High consistency on critical red flags (validated in tests)
 
 ---
 
@@ -342,19 +342,16 @@ PediSafe can be deployed as part of a patient education platform, while generic 
 
 ### Accuracy Test (100 Pediatric Fever Cases)
 
-| Metric | Generic AI | PediSafe |
+| Metric | Generic AI (estimated) | PediSafe (tested) |
 |--------|-----------|----------|
-| **Correct Triage Level** | 78% | 94% |
-| **Missed Red Flags** | 8 cases | 0 cases |
-| **Over-Triage (false alarms)** | 12% | 18% |
-| **Source Citations** | 5% | 100% |
-| **Response Consistency** | 71% | 98% |
+| **Correct Triage Level** | ~78% | 81% (13/16 tests) |
+| **Red Flag Detection** | Inconsistent | **100%** deterministic (Layer A) |
 
-**Note:** Over-triage is acceptable (better safe than sorry). Missed red flags are CRITICAL failures.
+**Note:** These are real test results from our automated suite. Over-triage on edge cases is acceptable (better safe than sorry). Missed critical cases are unacceptable - PediSafe has **zero**.
 
 ---
 
-## 🏆 Conclusion
+## Conclusion
 
 ### When to Use Generic AI
 - General questions about parenting

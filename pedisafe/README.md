@@ -128,7 +128,7 @@ PediSafe implements a **multi-layered safety architecture** that combines determ
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/pedisafe.git
+git clone https://github.com/andrew7u7/pedisafe.git
 cd pedisafe
 
 # 2. Create virtual environment
@@ -150,7 +150,7 @@ pip install -r requirements.txt
 - The app includes a **FREE Cerebras API key** by default
 - Just run the app and start chatting!
 
-**For Production (Optional):**
+**For Development (Optional):**
 ```bash
 # Copy example file
 cp .env.example .env
@@ -353,7 +353,7 @@ We welcome contributions! Here's how:
 
 ## 👥 Team
 
-- [Your Name] - Full Stack Developer & ML Engineer
+- Andree Salazar - Full Stack Developer & ML Engineer
 
 ## 📄 License
 
@@ -374,8 +374,8 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ## 📞 Contact & Support
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/pedisafe/issues)
-- **Email:** your.email@example.com
+- **Issues:** [GitHub Issues](https://github.com/andrew7u7/pedisafe/issues)
+- **Email:** andree.salazar@example.com
 - **Discord:** [Alameda Hacks Server](https://discord.com/invite/bZT2vKg7Ub)
 
 ---

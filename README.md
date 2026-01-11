@@ -15,7 +15,7 @@ Sistema de triaje pediátrico basado en IA que ayuda a padres a determinar el ni
 - **Arquitectura RAG (Retrieval-Augmented Generation):**
   - Capa A: Detección determinística de red flags
   - Capa B: Análisis contextual con LLM (Cerebras)
-  - Base de conocimiento: 8 documentos oficiales AAP/NHS
+  - Base de conocimiento: 5 documentos oficiales AAP/NHS
 
 - **Suite de Tests Automáticos:**
   - 16 casos de prueba validados
@@ -68,15 +68,12 @@ venv\Scripts\python.exe -m pytest pedisafe/test_pedisafe.py -v --html=pedisafe/r
 │   ├── pytest.ini                # Configuración pytest
 │   ├── report.html               # Reporte de tests (generado)
 │   ├── requirements.txt          # Dependencias Python
-│   ├── knowledge/                # Base de conocimiento (8 archivos .md)
+│   ├── knowledge/                # Base de conocimiento (5 archivos .md)
 │   │   ├── aap_fever_baby.md
 │   │   ├── aap_fever_without_fear.md
 │   │   ├── aap_symptom_checker.md
-│   │   ├── nhs_baby_fever.md
-│   │   ├── nhs_fever_children.md
-│   │   ├── nhs_high_temperature.md
-│   │   ├── nhs_symptom_checker.md
-│   │   └── nhs_when_to_worry.md
+│   │   ├── aap_when_to_call.md
+│   │   └── nhs_fever_children.md
 │   └── .streamlit/
 │       ├── config.toml           # Configuración Streamlit
 │       └── secrets.toml.example  # Plantilla para API keys
@@ -230,21 +227,18 @@ Editar `secrets.toml` con tu API key.
 
 ## 🎓 Base de Conocimiento
 
-**8 documentos oficiales:**
+**5 documentos oficiales:**
 
 ### American Academy of Pediatrics (AAP)
-1. Fever in Babies & Children
-2. Fever Without Fear
-3. Symptom Checker
+1. Fever in Babies & Children (aap_fever_baby.md)
+2. Fever Without Fear (aap_fever_without_fear.md)
+3. Symptom Checker (aap_symptom_checker.md)
+4. When to Call the Pediatrician (aap_when_to_call.md)
 
 ### NHS UK
-1. Baby Fever Guide
-2. Fever in Children
-3. High Temperature Management
-4. Symptom Checker
-5. When to Worry
+1. Fever in Children (nhs_fever_children.md)
 
-**Total:** ~40,000 palabras de contenido médico verificado
+**Total:** ~13,000 palabras de contenido médico verificado de fuentes AAP y NHS
 
 ---
 
@@ -297,21 +291,22 @@ RUN_TESTS.bat
 
 ### Completado ✅
 - [x] Motor RAG con LangChain
-- [x] Interfaz Streamlit
-- [x] Base de conocimiento AAP/NHS
-- [x] Suite de tests automatizados
-- [x] Detección de red flags
-- [x] Sistema de niveles de color
+- [x] Interfaz Streamlit bilingüe (EN/ES)
+- [x] Base de conocimiento AAP/NHS (5 documentos)
+- [x] Suite de tests automatizados (16 casos)
+- [x] Detección determinística de red flags
+- [x] Sistema de niveles de color (4 niveles)
 - [x] Reportes HTML de testing
 - [x] Documentación completa
+- [x] 100% detección de emergencias (0 falsos negativos)
 
 ### Futuro 🔮
-- [ ] Soporte multiidioma (Español nativo)
+- [ ] Mejorar precisión en casos edge (fiebre persistente, 40°C)
+- [ ] Validación clínica con profesionales médicos
+- [ ] Expandir base de conocimiento (más condiciones)
 - [ ] Historial de consultas
-- [ ] Integración con calendario médico
-- [ ] App móvil
-- [ ] Notificaciones push
-- [ ] Telemedicina integrada
+- [ ] App móvil nativa
+- [ ] Integración con telemedicina
 
 ---
 
@@ -367,6 +362,7 @@ Primera ejecución descarga modelos (~110MB). Ejecuciones siguientes son más r�
 
 ---
 
-**Última actualización:** 2026-01-09  
+**Última actualización:** 2026-01-11  
 **Versión:** 1.0.0  
-**Estado:** ✅ Funcionando - Listo para Hackathon
+**Estado:** ✅ Prototipo funcional - 81% tests passing (100% en casos críticos)  
+**⚠️ Nota:** Este es un prototipo de hackathon, NO un producto médico validado
